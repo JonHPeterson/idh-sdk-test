@@ -1,0 +1,1436 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@theidh.com
+    name: API Support
+  description: |
+    The Industrial Data Hub Operational Techology (OT) API provides programmatic access to industrial data from The Indusrial Data Hub. This RESTful interface bridges modern web applications with high-performance time series data management, enabling efficient querying and analysis of historical industrial data.
+    ...existing description...
+  license:
+    name: The IDH License
+    url: http://www.theidh.com/licenses/LICENSE-1.0.html
+  termsOfService: http://swagger.io/terms/
+  title: The IDH Operational Technology API
+  version: "1.0"
+paths:
+  /admin/health:
+    get:
+      summary: Health check
+      description: Get the health status of the API
+      tags:
+        - admin
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Health status
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/version:
+    get:
+      summary: Get IDH App Server version
+      description: Get the current version of the IDH App Server
+      tags:
+        - admin
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: IDH App Server version
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionInfoResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/metadata/sources:
+    get:
+      summary: List all sources
+      description: Get list of all PI sources
+      tags:
+        - metadata
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of sources
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/SourcesResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/v1/metadata/sources/{nameOrUUID}:
+    get:
+      summary: Get source by Name or UUID
+      description: Get details for a specific source
+      tags:
+        - metadata
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: nameOrUUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Source Name or UUID
+      responses:
+        '200':
+          description: Source details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourcesResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/v1/metadata/sources/srctags/{sourceUUID}:
+    get:
+      summary: Get source data tags for a specific source using a tag query
+      description: Returns all source data tags for a specific source matching the query. Use [{}] as the query to return all tags for the source.
+      tags:
+        - metadata
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sourceUUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Source UUID
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Tag query JSON string
+      responses:
+        '200':
+          description: Source tag records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourceTagRecords'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/v1/metadata/sources/statesets/{sourceUUID}:
+    get:
+      summary: Get a map of all state sets by id and name for a specific source
+      description: Get a map of all state sets by id and name for a specific source
+      tags:
+        - metadata
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sourceUUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Source UUID
+      responses:
+        '200':
+          description: Map of state set IDs to names
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/v1/metadata/sources/statesets/name/{sourceUUID}:
+    get:
+      summary: Get state set for a source by Name
+      description: Get details for a specific state set by Name
+      tags:
+        - metadata
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sourceUUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Source UUID
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: State Set Name
+      responses:
+        '200':
+          description: State set details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MDStateSet'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/v1/metadata/sources/statesets/id/{sourceUUID}:
+    get:
+      summary: Get state set for a source by ID
+      description: Get details for a specific state set by ID
+      tags:
+        - metadata
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sourceUUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Source UUID
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: State Set ID
+      responses:
+        '200':
+          description: State set details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MDStateSet'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/classifications{name}:
+    get:
+      summary: Get classification by name
+      description: Get classification by name
+      tags:
+        - classifications
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Classification Name
+      responses:
+        '200':
+          description: Classification details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassificationResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/assets/rootassets:
+    get:
+      summary: Get all the root assets
+      description: Get all the root assets
+      tags:
+        - assets
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of root asset UUIDs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/v1/assets/getasset/{assetUUID}:
+    get:
+      summary: Get asset by UUID
+      description: Get asset by UUID
+      tags:
+        - assets
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: assetUUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset UUID
+      responses:
+        '200':
+          description: Asset details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/timeseries/types:
+    get:
+      summary: Get supported timeseries data types
+      description: Get supported timeseries data types
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Map of supported timeseries data type IDs to names
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/timeseries/tags/gettaginfo/{tagUUID}:
+    get:
+      summary: Get timeseries tag info by tag UUID
+      description: Get timeseries tag info by tag UUID
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tagUUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Tag UUID
+      responses:
+        '200':
+          description: Timeseries tag info details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TSGetTagInfoResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true  
+  /api/v1/timeseries/tags/getalltaginfo:
+    get:
+      summary: Get timeseries tag info for all tags
+      description: Get timeseries tag info for all tags
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: startPosition
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Starting position for pagination (default 0)
+        - name: maxResults
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Maximum number of tags to return (default 100)
+      responses:
+        '200':
+          description: Array of Map of Tag UUIDs to their info details
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/TSGetTagInfoResponses'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/timeseries/tags/getbysource/{sourceUUID}:
+    get:
+      summary: Get timeseries tag UUIDs for a specific source
+      description: Get timeseries tag UUIDs for a specific source
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sourceUUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Source UUID
+        - name: srcDataUUIDs
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: list of source data UUIDs
+      responses:
+        '200':
+          description: List of Tag UUIDs for the specified source and src data uuids
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/timeseries/tags/getsamples:
+    get:
+      summary: Get timeseries samples for tags
+      description: Get samples (recorded data) for timeseries tags. Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: starttime
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Start Time in ISO8601 format
+        - name: endtime
+          in: query
+          required: true
+          schema:
+            type: string
+          description: End Time in ISO8601 format
+        - name: maxSamples
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Maximum number of samples to retrieve per tag
+        - name: tagUUIDs
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: List of Tag UUIDs
+        - name: fromUnits
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: List of units to convert from, one per tagUUID
+        - name: toUnits
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: List of units to convert to, one per tagUUID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesSamplesResponse'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesSamplesResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+  /api/v1/timeseries/tags/getplotsamples:
+    get:
+      summary: Get plot timeseries samples for tags
+      description: Get data for timeseries tags. Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: starttime
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Start Time in ISO8601 format
+        - name: endtime
+          in: query
+          required: true
+          schema:
+            type: string
+          description: End Time in ISO8601 format
+        - name: lanes
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Number of lanes for downsampling
+        - name: maxSamples
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Maximum number of samples to retrieve per tag
+        - name: tagUUIDs
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          description: List of Tag UUIDs
+        - name: fromUnits
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          description: List of units to convert from, one per tagUUID
+        - name: toUnits
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          description: List of units to convert to, one per tagUUID
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeSeriesSamplesResponse"
+            application/msgpack:
+              schema:
+                $ref: "#/components/schemas/TimeSeriesSamplesResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+  /api/v1/timeseries/tags/getaggregatesamples:
+    get:
+      summary: Get aggregate timeseries samples for tags
+      description: Get data for timeseries tags aggregated. Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: starttime
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Start Time in ISO8601 format
+        - name: endtime
+          in: query
+          required: true
+          schema:
+            type: string
+          description: End Time in ISO8601 format
+        - name: aggregate_type
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Type of aggregation such as average, mean, total, sum
+        - name: window
+          in: query
+          required: true
+          schema:
+            type: number
+          description: Window in seconds for aggregation
+        - name: maxSamples
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Maximum number of samples to retrieve per tag
+        - name: tagUUIDs
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: List of Tag UUIDs
+        - name: fromUnits
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: List of units to convert from, one per tagUUID
+        - name: toUnits
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: List of units to convert to, one per tagUUID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesSamplesResponse'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesSamplesResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+  /api/v1/timeseries/tags/getgridsamples:
+    get:
+      summary: Get grid timeseries samples for tags
+      description: Get data for timeseries tags in a grid format (equally spaced samples, interpolated if needed). Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: starttime
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Start Time in ISO8601 format
+        - name: endtime
+          in: query
+          required: true
+          schema:
+            type: string
+          description: End Time in ISO8601 format
+        - name: grid
+          in: query
+          required: true
+          schema:
+            type: number
+          description: Grid interval in seconds for equally spaced samples
+        - name: maxSamples
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Maximum number of samples to retrieve per tag
+        - name: tagUUIDs
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: List of Tag UUIDs
+        - name: fromUnits
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: List of units to convert from, one per tagUUID
+        - name: toUnits
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: List of units to convert to, one per tagUUID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesSamplesResponse'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesSamplesResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+  /api/v1/timeseries/aggregateusageinfo:
+    get:
+      summary: Get aggregate usage info for timeseries queries
+      description: Get aggregate usage information. This is a short description of the various supported aggregation types and usage
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Usage info details
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string  
+  /api/v1/timeseries/aggregatetypes:
+    get:
+      summary: Get supported aggregate types for timeseries queries
+      description: Get supported aggregate types for timeseries queries such as average, mean, total, sum, min, max, etc.
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Map of supported aggregate type IDs to names
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/timeseries/uom/list_uom_prefixes:
+    get:
+      summary: Get list of supported unit of measure (UOM) prefixes for timeseries queries
+      description: Get list of supported unit of measure (UOM) prefixes for timeseries queries such as kilo, milli, micro, etc.
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Map of supported UOM prefixes with their names, symbols, and values
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    symbol:
+                      type: string
+                    value:
+                      type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true  
+  /api/v1/timeseries/uom/list_uoms/{uom_filter}:
+    get:
+      summary: Get list of supported unit of measures (UOMs) for timeseries queries
+      description: Get list of supported unit of measures (UOMs) for timeseries queries. Optionally filter by a search string that matches either the UOM name, symbol, or alias.
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: uom_filter
+          in: path
+          required: false
+          schema:
+            type: string
+          description: Optional filter string to match UOM name, symbol, or alias
+      responses:
+        '200':
+          description: UOM Info Table with all the details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UOMInfoTable'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/timeseries/uom/get_uom_info/{uom_name}:
+    get:
+      summary: Get unit of measure (UOM) details by name for timeseries queries
+      description: Get unit of measure (UOM) details by name for timeseries queries. These are single UOMs, not derived UOMs like m/second.
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: uom_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: UOM name to get details for
+      responses:
+        '200':
+          description: UOM Info with all the details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UOMInfo'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true  
+  /api/v1/timeseries/uom/parse_uom/{uom_string}:
+    get:
+      summary: Parse a unit of measure (UOM) string into its components
+      description: Parse a single unit of measure (UOM) string and display conversion information. Derived UOMs are not supported. .
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: uom_string
+          in: path
+          required: true
+          schema:
+            type: string
+          description: UOM string to parse
+      responses:
+        '200':
+          description: Parse UOM Result with the components of the UOM string.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseUOMResult'
+        '400':
+          description: Bad request (e.g. invalid UOM string)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/timeseries/uom/convert:
+    get:
+      summary: Convert a value from one unit of measure (UOM) to another
+      description: Convert a value from one unit of measure (UOM) to another. For example, convert 100 from "km/h" to "m/s".
+      tags:
+        - timeseries
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: value
+          in: query
+          required: true
+          schema:
+            type: number
+          description: Value to convert
+        - name: fromUOM
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Unit of measure to convert from
+        - name: toUOM
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Unit of measure to convert to
+      responses:
+        '200':
+          description: The value converted to the target unit of measure (UOM).
+          content:
+            application/json:
+              schema:
+                type: number
+                format: double
+        '400':
+          description: Bad request (e.g. invalid UOMs or incompatible UOMs)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true  
+components:
+  schemas:
+    VersionInfoResponse:
+      type: object
+      properties:
+        version:
+          type: string
+        buildTime:
+          type: string
+        gitCommit:
+          type: string
+        libCVersion:
+          type: string
+      required:
+        - version
+        - buildTime
+        - gitCommit
+        - libCVersion
+      description: Version information response
+    SourceTagRecord:
+      type: object
+      properties:
+        src_uuid:
+          type: string
+        src_data_uuid:
+          type: string
+        src_tag_name:
+          type: string
+        properties:
+          type: string
+          description: Optional properties in JSON format
+      required:
+        - src_uuid
+        - src_data_uuid
+        - src_tag_name
+      description: Source tag record
+    SourceTagRecords:
+      type: array
+      items:
+        $ref: '#/components/schemas/SourceTagRecord'    
+    MDStateSet:
+      type: object
+      properties:
+        src_uuid:
+          type: string
+        state_set_id:
+          type: integer
+        state_set_name:
+          type: string
+        states:
+          type: object
+          description: Mapping of state IDs to names
+          additionalProperties:
+            type: string
+      required:
+        - src_uuid
+        - state_set_id
+        - state_set_name
+        - states
+      description: State set details
+    SourcesResponse:
+      type: object
+      properties:
+        src_uuid:
+          type: string
+        src_name:
+          type: string
+        properties:
+          type: string
+          description: Optional properties in JSON format
+      required:
+        - src_uuid
+        - src_name
+      description: Source details response
+    ClassificationResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        items:
+          type: integer
+      required:
+        - name
+        - items
+      description: Classification details response
+    AssetResponse:
+      type: object
+      properties:
+        asset_uuid:
+          type: string
+        asset_name:
+          type: string
+        aliases:
+          type: object
+          description: Mapping of alias names to UUIDs
+          additionalProperties:
+            type: string
+        properties:
+          type: object
+          description: Mapping of property names to values
+          additionalProperties:
+            type: string
+      required:
+        - asset_uuid
+        - asset_name
+        - aliases
+      description: Asset details response
+    TSGetTagInfoResponse:
+      type: object
+      properties:
+        tag_uuid:
+          type: string
+        source_uuid:
+          type: string
+        source_data_uuid:
+          type: string
+        data_type:
+          type: integer
+        uom:
+          type: string
+        record_count:
+          type: integer
+        earliest_time_iso8601:
+          type: string
+        latest_time_iso8601:
+          type: string
+      required:
+        - tag_uuid
+        - source_uuid
+        - source_data_uuid
+        - data_type
+        - uom
+        - record_count
+        - earliest_time_iso8601
+        - latest_time_iso8601
+      description: Timeseries tag info response
+    TSGetTagInfoResponses:
+      type: array
+      items:
+        $ref: '#/components/schemas/TSGetTagInfoResponse'
+    GetSamplesResult:
+      type: object
+      properties:
+        is_status:
+          type: array
+          items:
+            type: boolean
+        timestamps_ns:
+          type: array
+          items:
+            type: integer
+        values:
+          type: array
+          items:
+            type: number
+        values_str:
+          type: array
+          items:
+            type: string
+        array_info:
+          $ref: '#/components/schemas/TSSampleArrayInfo'
+      required:
+        - is_status
+        - timestamps_ns
+        - array_info
+      additionalProperties: false
+    TSSampleArrayInfo:
+      type: object
+      properties:
+        tag_uuid:
+          type: string
+        data_type:
+          type: integer
+        uom:
+          type: string
+        sample_count:
+          type: integer
+        start_boundary:
+          $ref: '#/components/schemas/TimeSeriesSample'
+        end_boundary:
+          $ref: '#/components/schemas/TimeSeriesSample'
+        data_assembly_time:
+          type: number
+      required:
+        - tag_uuid
+        - data_type
+        - uom
+        - sample_count
+        - start_boundary
+        - end_boundary
+        - data_assembly_time
+      additionalProperties: false
+    TimeSeriesSample:
+      type: object
+      properties:
+        is_status:
+          type: boolean
+        timestamp_ns:
+          type: integer
+        value:
+          type: number
+        value_str:
+          type: string
+      required:
+        - is_status
+        - timestamp_ns
+        - value
+      additionalProperties: false
+    TimeSeriesSamplesResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/GetSamplesResult'
+      required:
+        - data
+      additionalProperties: false
+    UOMInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        plural_name:
+          type: string
+        symbol:
+          type: string
+        def:
+          type: string
+        definition:
+          type: string
+        comment:
+          type: string
+        is_base:
+          type: boolean
+        is_dimensionless:
+          type: boolean
+        aliases:
+          type: string
+          description: comma-separated list of aliases for the UOM
+      required:
+        - name
+        - plural_name
+        - symbol 
+        - def
+        - definition
+        - comment
+        - is_base
+        - is_dimensionless
+        - aliases
+      additionalProperties: false 
+
+    UOMInfoTable:
+      type: object
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+        plural_names:
+          type: array
+          items:
+            type: string
+        symbols:
+          type: array
+          items:
+            type: string
+        defs:
+          type: array
+          items:
+            type: string
+        definitions:
+          type: array
+          items:
+            type: string
+        comments:
+          type: array
+          items:
+            type: string
+        is_base:
+          type: array
+          items:
+            type: boolean
+        is_dimensionless:
+          type: array
+          items:
+            type: boolean
+        aliases:
+          type: array
+          items:
+            type: string
+      required:
+        - names
+        - plural_names
+        - symbols 
+        - defs
+        - definitions
+        - comments
+        - is_base
+        - is_dimensionless
+        - aliases
+      additionalProperties: false
+    ParseUOMResult:
+      type: object
+      properties:
+        name:
+          type: string
+        symbol:
+          type: string
+        def:
+          type: string
+      required:
+        - name
+        - symbol
+        - def
+      additionalProperties: false
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
