@@ -14,13 +14,13 @@ class TimeSeriesSample:
     Attributes:
         is_status (bool):
         timestamp_ns (int):
-        value (float):
+        value (Union[Unset, float]):
         value_str (Union[Unset, str]):
     """
 
     is_status: bool
     timestamp_ns: int
-    value: float
+    value: Union[Unset, float] = UNSET
     value_str: Union[Unset, str] = UNSET
 
     def to_dict(self) -> dict[str, Any]:
@@ -38,9 +38,10 @@ class TimeSeriesSample:
             {
                 "is_status": is_status,
                 "timestamp_ns": timestamp_ns,
-                "value": value,
             }
         )
+        if value is not UNSET:
+            field_dict["value"] = value
         if value_str is not UNSET:
             field_dict["value_str"] = value_str
 
@@ -53,7 +54,7 @@ class TimeSeriesSample:
 
         timestamp_ns = d.pop("timestamp_ns")
 
-        value = d.pop("value")
+        value = d.pop("value", UNSET)
 
         value_str = d.pop("value_str", UNSET)
 

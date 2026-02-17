@@ -1,4 +1,4 @@
-"""A client library for accessing The IDH Operational Technology API"""
+"""A client library for accessing IDH-OTA"""
 
 from .client import AuthenticatedClient, Client
 

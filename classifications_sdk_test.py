@@ -5,9 +5,9 @@ Run this file and set breakpoints to step through in a debugger.
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'sdk')))
-from the_idh_operational_technology_api_client.client import Client
-from the_idh_operational_technology_api_client.api.classifications import get_api_v1_classificationsname
-from the_idh_operational_technology_api_client.models import ClassificationResponse
+from idh_ota_client.client import Client
+from idh_ota_client.api.classifications import get_api_v1_classificationsname
+from idh_ota_client.models import ClassificationResponse
 
 def main():
     # Set a breakpoint here to step through

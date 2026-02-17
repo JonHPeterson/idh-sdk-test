@@ -10,7 +10,7 @@ info:
     name: The IDH License
     url: http://www.theidh.com/licenses/LICENSE-1.0.html
   termsOfService: http://swagger.io/terms/
-  title: The IDH Operational Technology API
+  title: IDH-OTA
   version: "1.0"
 paths:
   /admin/health:
@@ -73,6 +73,101 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
+  /api/v1/assets/rootassets:
+    get:
+      summary: Get all the root assets
+      description: Get all the root assets
+      tags:
+        - assets
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Map of asset UUIDs to asset names (or similar)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RootAssetsResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/v1/assets/{assetUUID}:
+    get:
+      summary: Get asset by UUID
+      description: Get asset by UUID
+      tags:
+        - assets
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: assetUUID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset UUID
+      responses:
+        '200':
+          description: Asset details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/v1/classifications{name}:
+    get:
+      summary: Get classification by name
+      description: Get classification by name
+      tags:
+        - classifications
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Classification Name
+      responses:
+        '200':
+          description: Classification details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassificationResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
   /api/v1/metadata/sources:
     get:
       summary: List all sources
@@ -104,7 +199,6 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-
   /api/v1/metadata/sources/{nameOrUUID}:
     get:
       summary: Get source by Name or UUID
@@ -141,7 +235,6 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-
   /api/v1/metadata/sources/srctags/{sourceUUID}:
     get:
       summary: Get source data tags for a specific source using a tag query
@@ -191,7 +284,6 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-
   /api/v1/metadata/sources/statesets/{sourceUUID}:
     get:
       summary: Get a map of all state sets by id and name for a specific source
@@ -273,7 +365,6 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-
   /api/v1/metadata/sources/statesets/id/{sourceUUID}:
     get:
       summary: Get state set for a source by ID
@@ -304,103 +395,6 @@ paths:
                 $ref: '#/components/schemas/MDStateSet'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: true
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: true
-  /api/v1/classifications{name}:
-    get:
-      summary: Get classification by name
-      description: Get classification by name
-      tags:
-        - classifications
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Classification Name
-      responses:
-        '200':
-          description: Classification details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ClassificationResponse'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: true
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: true
-  /api/v1/assets/rootassets:
-    get:
-      summary: Get all the root assets
-      description: Get all the root assets
-      tags:
-        - assets
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          description: List of root asset UUIDs
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: true
-
-  /api/v1/assets/getasset/{assetUUID}:
-    get:
-      summary: Get asset by UUID
-      description: Get asset by UUID
-      tags:
-        - assets
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: assetUUID
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Asset UUID
-      responses:
-        '200':
-          description: Asset details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssetResponse'
-        '400':
-          description: Bad request
           content:
             application/json:
               schema:
@@ -1215,10 +1209,21 @@ components:
           description: Mapping of property names to values
           additionalProperties:
             type: string
+        parent_assets:
+          type: array
+          items:
+            type: string
+        child_assets:
+          type: array
+          items:
+            type: string
       required:
         - asset_uuid
         - asset_name
         - aliases
+        - properties
+        - parent_assets
+        - child_assets
       description: Asset details response
     TSGetTagInfoResponse:
       type: object
@@ -1319,7 +1324,6 @@ components:
       required:
         - is_status
         - timestamp_ns
-        - value
       additionalProperties: false
     TimeSeriesSamplesResponse:
       type: object
@@ -1415,6 +1419,12 @@ components:
         - is_dimensionless
         - aliases
       additionalProperties: false
+
+    RootAssetsResponse:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map of asset UUIDs to asset names (or similar)
     ParseUOMResult:
       type: object
       properties:

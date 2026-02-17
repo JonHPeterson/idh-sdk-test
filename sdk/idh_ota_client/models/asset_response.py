@@ -1,10 +1,8 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-
-from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.asset_response_aliases import AssetResponseAliases
@@ -22,13 +20,17 @@ class AssetResponse:
         asset_uuid (str):
         asset_name (str):
         aliases (AssetResponseAliases): Mapping of alias names to UUIDs
-        properties (Union[Unset, AssetResponseProperties]): Mapping of property names to values
+        properties (AssetResponseProperties): Mapping of property names to values
+        parent_assets (list[str]):
+        child_assets (list[str]):
     """
 
     asset_uuid: str
     asset_name: str
     aliases: "AssetResponseAliases"
-    properties: Union[Unset, "AssetResponseProperties"] = UNSET
+    properties: "AssetResponseProperties"
+    parent_assets: list[str]
+    child_assets: list[str]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -38,9 +40,11 @@ class AssetResponse:
 
         aliases = self.aliases.to_dict()
 
-        properties: Union[Unset, dict[str, Any]] = UNSET
-        if not isinstance(self.properties, Unset):
-            properties = self.properties.to_dict()
+        properties = self.properties.to_dict()
+
+        parent_assets = self.parent_assets
+
+        child_assets = self.child_assets
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -49,10 +53,11 @@ class AssetResponse:
                 "asset_uuid": asset_uuid,
                 "asset_name": asset_name,
                 "aliases": aliases,
+                "properties": properties,
+                "parent_assets": parent_assets,
+                "child_assets": child_assets,
             }
         )
-        if properties is not UNSET:
-            field_dict["properties"] = properties
 
         return field_dict
 
@@ -68,18 +73,19 @@ class AssetResponse:
 
         aliases = AssetResponseAliases.from_dict(d.pop("aliases"))
 
-        _properties = d.pop("properties", UNSET)
-        properties: Union[Unset, AssetResponseProperties]
-        if isinstance(_properties, Unset):
-            properties = UNSET
-        else:
-            properties = AssetResponseProperties.from_dict(_properties)
+        properties = AssetResponseProperties.from_dict(d.pop("properties"))
+
+        parent_assets = cast(list[str], d.pop("parent_assets"))
+
+        child_assets = cast(list[str], d.pop("child_assets"))
 
         asset_response = cls(
             asset_uuid=asset_uuid,
             asset_name=asset_name,
             aliases=aliases,
             properties=properties,
+            parent_assets=parent_assets,
+            child_assets=child_assets,
         )
 
         asset_response.additional_properties = d

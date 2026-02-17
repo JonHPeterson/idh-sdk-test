@@ -4,11 +4,11 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="GetApiV1AssetsGetassetAssetUUIDResponse500")
+T = TypeVar("T", bound="GetApiV1AssetsAssetUUIDResponse500")
 
 
 @_attrs_define
-class GetApiV1AssetsGetassetAssetUUIDResponse500:
+class GetApiV1AssetsAssetUUIDResponse500:
     """ """
 
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -22,10 +22,10 @@ class GetApiV1AssetsGetassetAssetUUIDResponse500:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        get_api_v1_assets_getasset_asset_uuid_response_500 = cls()
+        get_api_v1_assets_asset_uuid_response_500 = cls()
 
-        get_api_v1_assets_getasset_asset_uuid_response_500.additional_properties = d
-        return get_api_v1_assets_getasset_asset_uuid_response_500
+        get_api_v1_assets_asset_uuid_response_500.additional_properties = d
+        return get_api_v1_assets_asset_uuid_response_500
 
     @property
     def additional_keys(self) -> list[str]:

@@ -1,11 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Optional, Union
 
 import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.get_api_v1_assets_rootassets_response_500 import GetApiV1AssetsRootassetsResponse500
+from ...models.root_assets_response import RootAssetsResponse
 from ...types import Response
 
 
@@ -20,9 +21,9 @@ def _get_kwargs() -> dict[str, Any]:
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[GetApiV1AssetsRootassetsResponse500, list[str]]]:
+) -> Optional[Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]]:
     if response.status_code == 200:
-        response_200 = cast(list[str], response.json())
+        response_200 = RootAssetsResponse.from_dict(response.json())
 
         return response_200
 
@@ -39,7 +40,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[GetApiV1AssetsRootassetsResponse500, list[str]]]:
+) -> Response[Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -51,7 +52,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[Union[GetApiV1AssetsRootassetsResponse500, list[str]]]:
+) -> Response[Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]]:
     """Get all the root assets
 
      Get all the root assets
@@ -61,7 +62,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[GetApiV1AssetsRootassetsResponse500, list[str]]]
+        Response[Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]]
     """
 
     kwargs = _get_kwargs()
@@ -76,7 +77,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[GetApiV1AssetsRootassetsResponse500, list[str]]]:
+) -> Optional[Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]]:
     """Get all the root assets
 
      Get all the root assets
@@ -86,7 +87,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[GetApiV1AssetsRootassetsResponse500, list[str]]
+        Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]
     """
 
     return sync_detailed(
@@ -97,7 +98,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[Union[GetApiV1AssetsRootassetsResponse500, list[str]]]:
+) -> Response[Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]]:
     """Get all the root assets
 
      Get all the root assets
@@ -107,7 +108,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[GetApiV1AssetsRootassetsResponse500, list[str]]]
+        Response[Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]]
     """
 
     kwargs = _get_kwargs()
@@ -120,7 +121,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[GetApiV1AssetsRootassetsResponse500, list[str]]]:
+) -> Optional[Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]]:
     """Get all the root assets
 
      Get all the root assets
@@ -130,7 +131,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[GetApiV1AssetsRootassetsResponse500, list[str]]
+        Union[GetApiV1AssetsRootassetsResponse500, RootAssetsResponse]
     """
 
     return (

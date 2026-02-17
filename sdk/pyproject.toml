@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "the-idh-operational-technology-api-client"
+name = "idh-ota-client"
 version = "1.0"
-description = "A client library for accessing The IDH Operational Technology API"
+description = "A client library for accessing IDH-OTA"
 authors = []
 readme = "README.md"
 packages = [
-    { include = "the_idh_operational_technology_api_client" },
+    { include = "idh_ota_client" },
 ]
-include = ["CHANGELOG.md", "the_idh_operational_technology_api_client/py.typed"]
+include = ["CHANGELOG.md", "idh_ota_client/py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.9"

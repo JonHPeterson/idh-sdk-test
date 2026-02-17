@@ -6,8 +6,8 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.asset_response import AssetResponse
-from ...models.get_api_v1_assets_getasset_asset_uuid_response_400 import GetApiV1AssetsGetassetAssetUUIDResponse400
-from ...models.get_api_v1_assets_getasset_asset_uuid_response_500 import GetApiV1AssetsGetassetAssetUUIDResponse500
+from ...models.get_api_v1_assets_asset_uuid_response_400 import GetApiV1AssetsAssetUUIDResponse400
+from ...models.get_api_v1_assets_asset_uuid_response_500 import GetApiV1AssetsAssetUUIDResponse500
 from ...types import Response
 
 
@@ -16,7 +16,7 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/v1/assets/getasset/{asset_uuid}",
+        "url": f"/api/v1/assets/{asset_uuid}",
     }
 
     return _kwargs
@@ -24,21 +24,19 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]
-]:
+) -> Optional[Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]]:
     if response.status_code == 200:
         response_200 = AssetResponse.from_dict(response.json())
 
         return response_200
 
     if response.status_code == 400:
-        response_400 = GetApiV1AssetsGetassetAssetUUIDResponse400.from_dict(response.json())
+        response_400 = GetApiV1AssetsAssetUUIDResponse400.from_dict(response.json())
 
         return response_400
 
     if response.status_code == 500:
-        response_500 = GetApiV1AssetsGetassetAssetUUIDResponse500.from_dict(response.json())
+        response_500 = GetApiV1AssetsAssetUUIDResponse500.from_dict(response.json())
 
         return response_500
 
@@ -50,9 +48,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[
-    Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]
-]:
+) -> Response[Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -65,9 +61,7 @@ def sync_detailed(
     asset_uuid: str,
     *,
     client: AuthenticatedClient,
-) -> Response[
-    Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]
-]:
+) -> Response[Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]]:
     """Get asset by UUID
 
      Get asset by UUID
@@ -80,7 +74,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]]
+        Response[Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]]
     """
 
     kwargs = _get_kwargs(
@@ -98,9 +92,7 @@ def sync(
     asset_uuid: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[
-    Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]
-]:
+) -> Optional[Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]]:
     """Get asset by UUID
 
      Get asset by UUID
@@ -113,7 +105,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]
+        Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]
     """
 
     return sync_detailed(
@@ -126,9 +118,7 @@ async def asyncio_detailed(
     asset_uuid: str,
     *,
     client: AuthenticatedClient,
-) -> Response[
-    Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]
-]:
+) -> Response[Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]]:
     """Get asset by UUID
 
      Get asset by UUID
@@ -141,7 +131,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]]
+        Response[Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]]
     """
 
     kwargs = _get_kwargs(
@@ -157,9 +147,7 @@ async def asyncio(
     asset_uuid: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[
-    Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]
-]:
+) -> Optional[Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]]:
     """Get asset by UUID
 
      Get asset by UUID
@@ -172,7 +160,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AssetResponse, GetApiV1AssetsGetassetAssetUUIDResponse400, GetApiV1AssetsGetassetAssetUUIDResponse500]
+        Union[AssetResponse, GetApiV1AssetsAssetUUIDResponse400, GetApiV1AssetsAssetUUIDResponse500]
     """
 
     return (

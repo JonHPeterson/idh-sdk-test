@@ -8,8 +8,8 @@ from .get_admin_health_response_404 import GetAdminHealthResponse404
 from .get_admin_health_response_500 import GetAdminHealthResponse500
 from .get_admin_version_response_404 import GetAdminVersionResponse404
 from .get_admin_version_response_500 import GetAdminVersionResponse500
-from .get_api_v1_assets_getasset_asset_uuid_response_400 import GetApiV1AssetsGetassetAssetUUIDResponse400
-from .get_api_v1_assets_getasset_asset_uuid_response_500 import GetApiV1AssetsGetassetAssetUUIDResponse500
+from .get_api_v1_assets_asset_uuid_response_400 import GetApiV1AssetsAssetUUIDResponse400
+from .get_api_v1_assets_asset_uuid_response_500 import GetApiV1AssetsAssetUUIDResponse500
 from .get_api_v1_assets_rootassets_response_500 import GetApiV1AssetsRootassetsResponse500
 from .get_api_v1_classificationsname_response_400 import GetApiV1ClassificationsnameResponse400
 from .get_api_v1_classificationsname_response_500 import GetApiV1ClassificationsnameResponse500
@@ -99,6 +99,7 @@ from .get_samples_result import GetSamplesResult
 from .md_state_set import MDStateSet
 from .md_state_set_states import MDStateSetStates
 from .parse_uom_result import ParseUOMResult
+from .root_assets_response import RootAssetsResponse
 from .source_tag_record import SourceTagRecord
 from .sources_response import SourcesResponse
 from .time_series_sample import TimeSeriesSample
@@ -119,8 +120,8 @@ __all__ = (
     "GetAdminHealthResponse500",
     "GetAdminVersionResponse404",
     "GetAdminVersionResponse500",
-    "GetApiV1AssetsGetassetAssetUUIDResponse400",
-    "GetApiV1AssetsGetassetAssetUUIDResponse500",
+    "GetApiV1AssetsAssetUUIDResponse400",
+    "GetApiV1AssetsAssetUUIDResponse500",
     "GetApiV1AssetsRootassetsResponse500",
     "GetApiV1ClassificationsnameResponse400",
     "GetApiV1ClassificationsnameResponse500",
@@ -168,6 +169,7 @@ __all__ = (
     "MDStateSet",
     "MDStateSetStates",
     "ParseUOMResult",
+    "RootAssetsResponse",
     "SourcesResponse",
     "SourceTagRecord",
     "TimeSeriesSample",
