@@ -14,7 +14,7 @@ from ...models.get_api_v1_metadata_sources_srctags_source_uuid_response_404 impo
 from ...models.get_api_v1_metadata_sources_srctags_source_uuid_response_500 import (
     GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500,
 )
-from ...models.source_tag_record import SourceTagRecord
+from ...models.source_tag_records import SourceTagRecords
 from ...types import UNSET, Response
 
 
@@ -45,18 +45,11 @@ def _parse_response(
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500,
-        list["SourceTagRecord"],
+        SourceTagRecords,
     ]
 ]:
     if response.status_code == 200:
-        response_200 = []
-        _response_200 = response.json()
-        for componentsschemas_source_tag_records_item_data in _response_200:
-            componentsschemas_source_tag_records_item = SourceTagRecord.from_dict(
-                componentsschemas_source_tag_records_item_data
-            )
-
-            response_200.append(componentsschemas_source_tag_records_item)
+        response_200 = SourceTagRecords.from_dict(response.json())
 
         return response_200
 
@@ -88,7 +81,7 @@ def _build_response(
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500,
-        list["SourceTagRecord"],
+        SourceTagRecords,
     ]
 ]:
     return Response(
@@ -109,7 +102,7 @@ def sync_detailed(
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500,
-        list["SourceTagRecord"],
+        SourceTagRecords,
     ]
 ]:
     """Get source data tags for a specific source using a tag query
@@ -126,7 +119,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500, list['SourceTagRecord']]]
+        Response[Union[GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500, SourceTagRecords]]
     """
 
     kwargs = _get_kwargs(
@@ -151,7 +144,7 @@ def sync(
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500,
-        list["SourceTagRecord"],
+        SourceTagRecords,
     ]
 ]:
     """Get source data tags for a specific source using a tag query
@@ -168,7 +161,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500, list['SourceTagRecord']]
+        Union[GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500, SourceTagRecords]
     """
 
     return sync_detailed(
@@ -188,7 +181,7 @@ async def asyncio_detailed(
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500,
-        list["SourceTagRecord"],
+        SourceTagRecords,
     ]
 ]:
     """Get source data tags for a specific source using a tag query
@@ -205,7 +198,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500, list['SourceTagRecord']]]
+        Response[Union[GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500, SourceTagRecords]]
     """
 
     kwargs = _get_kwargs(
@@ -228,7 +221,7 @@ async def asyncio(
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404,
         GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500,
-        list["SourceTagRecord"],
+        SourceTagRecords,
     ]
 ]:
     """Get source data tags for a specific source using a tag query
@@ -245,7 +238,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500, list['SourceTagRecord']]
+        Union[GetApiV1MetadataSourcesSrctagsSourceUUIDResponse400, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse404, GetApiV1MetadataSourcesSrctagsSourceUUIDResponse500, SourceTagRecords]
     """
 
     return (

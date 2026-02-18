@@ -1,10 +1,12 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
+if TYPE_CHECKING:
+    from ..models.source_tag_record_properties import SourceTagRecordProperties
+
 
 T = TypeVar("T", bound="SourceTagRecord")
 
@@ -17,13 +19,13 @@ class SourceTagRecord:
         src_uuid (str):
         src_data_uuid (str):
         src_tag_name (str):
-        properties (Union[Unset, str]): Optional properties in JSON format
+        properties (SourceTagRecordProperties): Map of properties as a set of name value pairs
     """
 
     src_uuid: str
     src_data_uuid: str
     src_tag_name: str
-    properties: Union[Unset, str] = UNSET
+    properties: "SourceTagRecordProperties"
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -33,7 +35,7 @@ class SourceTagRecord:
 
         src_tag_name = self.src_tag_name
 
-        properties = self.properties
+        properties = self.properties.to_dict()
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -42,15 +44,16 @@ class SourceTagRecord:
                 "src_uuid": src_uuid,
                 "src_data_uuid": src_data_uuid,
                 "src_tag_name": src_tag_name,
+                "properties": properties,
             }
         )
-        if properties is not UNSET:
-            field_dict["properties"] = properties
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.source_tag_record_properties import SourceTagRecordProperties
+
         d = dict(src_dict)
         src_uuid = d.pop("src_uuid")
 
@@ -58,7 +61,7 @@ class SourceTagRecord:
 
         src_tag_name = d.pop("src_tag_name")
 
-        properties = d.pop("properties", UNSET)
+        properties = SourceTagRecordProperties.from_dict(d.pop("properties"))
 
         source_tag_record = cls(
             src_uuid=src_uuid,

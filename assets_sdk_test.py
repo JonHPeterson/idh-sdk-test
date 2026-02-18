@@ -28,6 +28,12 @@ def main():
         raw_root_assets = http_client.get("http://localhost:8080/api/v1/assets/rootassets")
         print("\nRaw root assets response text:")
         print(raw_root_assets.text)
-
+        raw_root_assets = http_client.get("http://localhost:8080/api/v1/assets/rootassets")
+        print("\nRaw root assets response text:")
+        print(raw_root_assets.text)
+        if first_asset:
+            raw_asset = http_client.get(f"http://localhost:8080/api/v1/assets/{first_asset}")
+            print(f"\nRaw asset response text for UUID {first_asset}:")
+            print(raw_asset.text)
 if __name__ == "__main__":
     main()

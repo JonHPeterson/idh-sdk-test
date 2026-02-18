@@ -4,60 +4,28 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="SourcesResponse")
+T = TypeVar("T", bound="GetApiV1UomInfoUomNameResponse500")
 
 
 @_attrs_define
-class SourcesResponse:
-    """Source details response
+class GetApiV1UomInfoUomNameResponse500:
+    """ """
 
-    Attributes:
-        src_uuid (str):
-        src_name (str):
-        properties (str): Optional properties in JSON format
-    """
-
-    src_uuid: str
-    src_name: str
-    properties: str
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        src_uuid = self.src_uuid
-
-        src_name = self.src_name
-
-        properties = self.properties
-
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update(
-            {
-                "src_uuid": src_uuid,
-                "src_name": src_name,
-                "properties": properties,
-            }
-        )
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        src_uuid = d.pop("src_uuid")
+        get_api_v1_uom_info_uom_name_response_500 = cls()
 
-        src_name = d.pop("src_name")
-
-        properties = d.pop("properties")
-
-        sources_response = cls(
-            src_uuid=src_uuid,
-            src_name=src_name,
-            properties=properties,
-        )
-
-        sources_response.additional_properties = d
-        return sources_response
+        get_api_v1_uom_info_uom_name_response_500.additional_properties = d
+        return get_api_v1_uom_info_uom_name_response_500
 
     @property
     def additional_keys(self) -> list[str]:

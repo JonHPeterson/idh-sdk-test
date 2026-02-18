@@ -431,7 +431,7 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/timeseries/tags/gettaginfo/{tagUUID}:
+  /api/v1/timeseries/taginfo/{tagUUID}:
     get:
       summary: Get timeseries tag info by tag UUID
       description: Get timeseries tag info by tag UUID
@@ -474,7 +474,7 @@ paths:
               schema:
                 type: object
                 additionalProperties: true  
-  /api/v1/timeseries/tags/getalltaginfo:
+  /api/v1/timeseries/alltaginfo:
     get:
       summary: Get timeseries tag info for all tags
       description: Get timeseries tag info for all tags
@@ -511,7 +511,7 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/timeseries/tags/getbysource/{sourceUUID}:
+  /api/v1/timeseries/tagsbysource/{sourceUUID}:
     get:
       summary: Get timeseries tag UUIDs for a specific source
       description: Get timeseries tag UUIDs for a specific source
@@ -559,7 +559,7 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/timeseries/tags/getsamples:
+  /api/v1/timeseries/samples:
     get:
       summary: Get timeseries samples for tags
       description: Get samples (recorded data) for timeseries tags. Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
@@ -634,7 +634,7 @@ paths:
                 type: object
                 additionalProperties:
                   type: string
-  /api/v1/timeseries/tags/getplotsamples:
+  /api/v1/timeseries/plotsamples:
     get:
       summary: Get plot timeseries samples for tags
       description: Get data for timeseries tags. Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
@@ -709,7 +709,7 @@ paths:
                 type: object
                 additionalProperties:
                   type: string
-  /api/v1/timeseries/tags/getaggregatesamples:
+  /api/v1/timeseries/aggregatesamples:
     get:
       summary: Get aggregate timeseries samples for tags
       description: Get data for timeseries tags aggregated. Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
@@ -796,7 +796,7 @@ paths:
                 type: object
                 additionalProperties:
                   type: string
-  /api/v1/timeseries/tags/getgridsamples:
+  /api/v1/timeseries/gridsamples:
     get:
       summary: Get grid timeseries samples for tags
       description: Get data for timeseries tags in a grid format (equally spaced samples, interpolated if needed). Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
@@ -926,30 +926,21 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/timeseries/uom/list_uom_prefixes:
+  /api/v1/uom/prefixes:
     get:
       summary: Get list of supported unit of measure (UOM) prefixes for timeseries queries
       description: Get list of supported unit of measure (UOM) prefixes for timeseries queries such as kilo, milli, micro, etc.
       tags:
-        - timeseries
+        - uom
       security:
         - BearerAuth: []
       responses:
         '200':
-          description: Map of supported UOM prefixes with their names, symbols, and values
+          description: List of UOM prefixes
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                    symbol:
-                      type: string
-                    value:
-                      type: string
+                $ref: '#/components/schemas/PrefixListResponse'
         '500':
           description: Internal server error
           content:
@@ -957,21 +948,21 @@ paths:
               schema:
                 type: object
                 additionalProperties: true  
-  /api/v1/timeseries/uom/list_uoms/{uom_filter}:
+  /api/v1/uom/uoms:
     get:
       summary: Get list of supported unit of measures (UOMs) for timeseries queries
       description: Get list of supported unit of measures (UOMs) for timeseries queries. Optionally filter by a search string that matches either the UOM name, symbol, or alias.
       tags:
-        - timeseries
+        - uom
       security:
         - BearerAuth: []
       parameters:
-        - name: uom_filter
-          in: path
-          required: false
+        - name: filter_string
+          in: query
+          required: true
           schema:
             type: string
-          description: Optional filter string to match UOM name, symbol, or alias
+          description: Filter string to match UOM name, symbol, or alias
       responses:
         '200':
           description: UOM Info Table with all the details.
@@ -986,12 +977,12 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/timeseries/uom/get_uom_info/{uom_name}:
+  /api/v1/uom/info/{uom_name}:
     get:
       summary: Get unit of measure (UOM) details by name for timeseries queries
       description: Get unit of measure (UOM) details by name for timeseries queries. These are single UOMs, not derived UOMs like m/second.
       tags:
-        - timeseries
+        - uom
       security:
         - BearerAuth: []
       parameters:
@@ -1022,24 +1013,24 @@ paths:
               schema:
                 type: object
                 additionalProperties: true  
-  /api/v1/timeseries/uom/parse_uom/{uom_string}:
+  /api/v1/uom/parse:
     get:
       summary: Parse a unit of measure (UOM) string into its components
       description: Parse a single unit of measure (UOM) string and display conversion information. Derived UOMs are not supported. .
       tags:
-        - timeseries
+        - uom
       security:
         - BearerAuth: []
       parameters:
         - name: uom_string
-          in: path
+          in: query
           required: true
           schema:
             type: string
           description: UOM string to parse
       responses:
         '200':
-          description: Parse UOM Result with the components of the UOM string.
+          description: Parse UOM into its base unit and conversion factors.
           content:
             application/json:
               schema:
@@ -1058,12 +1049,12 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/timeseries/uom/convert:
+  /api/v1/uom/convert:
     get:
       summary: Convert a value from one unit of measure (UOM) to another
       description: Convert a value from one unit of measure (UOM) to another. For example, convert 100 from "km/h" to "m/s".
       tags:
-        - timeseries
+        - uom
       security:
         - BearerAuth: []
       parameters:
@@ -1136,17 +1127,27 @@ components:
         src_tag_name:
           type: string
         properties:
-          type: string
-          description: Optional properties in JSON format
+          type: object
+          additionalProperties:
+            type: string
+          description: Map of properties as a set of name value pairs
       required:
         - src_uuid
         - src_data_uuid
         - src_tag_name
+        - properties
       description: Source tag record
     SourceTagRecords:
-      type: array
-      items:
-        $ref: '#/components/schemas/SourceTagRecord'    
+      type: object
+      properties:
+        source_tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceTagRecord'
+          description: Array of source tag records
+      required:
+        - source_tags
+      description: Object containing array of source tag records
     MDStateSet:
       type: object
       properties:
@@ -1180,6 +1181,7 @@ components:
       required:
         - src_uuid
         - src_name
+        - properties
       description: Source details response
     ClassificationResponse:
       type: object
@@ -1335,6 +1337,29 @@ components:
       required:
         - data
       additionalProperties: false
+    PrefixListResponse:
+      type: object
+      properties:
+        prefix_name:
+          type: array
+          items:
+            type: string
+          description: List of prefix names
+        prefix_symbol:
+          type: array
+          items:
+            type: string
+          description: List of prefix symbols
+        prefix_factor:
+          type: array
+          items:
+            type: number
+          description: List of prefix factors
+      required:
+        - prefix_name
+        - prefix_symbol
+        - prefix_factor
+      description: Dictionary of arrays for UOM prefixes
     UOMInfo:
       type: object
       properties:
@@ -1360,7 +1385,7 @@ components:
       required:
         - name
         - plural_name
-        - symbol 
+        - symbol
         - def
         - definition
         - comment
@@ -1419,7 +1444,6 @@ components:
         - is_dimensionless
         - aliases
       additionalProperties: false
-
     RootAssetsResponse:
       type: object
       additionalProperties:

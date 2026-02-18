@@ -1,41 +1,41 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="SourcesResponse")
+T = TypeVar("T", bound="PrefixListResponse")
 
 
 @_attrs_define
-class SourcesResponse:
-    """Source details response
+class PrefixListResponse:
+    """Dictionary of arrays for UOM prefixes
 
     Attributes:
-        src_uuid (str):
-        src_name (str):
-        properties (str): Optional properties in JSON format
+        prefix_name (list[str]): List of prefix names
+        prefix_symbol (list[str]): List of prefix symbols
+        prefix_factor (list[float]): List of prefix factors
     """
 
-    src_uuid: str
-    src_name: str
-    properties: str
+    prefix_name: list[str]
+    prefix_symbol: list[str]
+    prefix_factor: list[float]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        src_uuid = self.src_uuid
+        prefix_name = self.prefix_name
 
-        src_name = self.src_name
+        prefix_symbol = self.prefix_symbol
 
-        properties = self.properties
+        prefix_factor = self.prefix_factor
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "src_uuid": src_uuid,
-                "src_name": src_name,
-                "properties": properties,
+                "prefix_name": prefix_name,
+                "prefix_symbol": prefix_symbol,
+                "prefix_factor": prefix_factor,
             }
         )
 
@@ -44,20 +44,20 @@ class SourcesResponse:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        src_uuid = d.pop("src_uuid")
+        prefix_name = cast(list[str], d.pop("prefix_name"))
 
-        src_name = d.pop("src_name")
+        prefix_symbol = cast(list[str], d.pop("prefix_symbol"))
 
-        properties = d.pop("properties")
+        prefix_factor = cast(list[float], d.pop("prefix_factor"))
 
-        sources_response = cls(
-            src_uuid=src_uuid,
-            src_name=src_name,
-            properties=properties,
+        prefix_list_response = cls(
+            prefix_name=prefix_name,
+            prefix_symbol=prefix_symbol,
+            prefix_factor=prefix_factor,
         )
 
-        sources_response.additional_properties = d
-        return sources_response
+        prefix_list_response.additional_properties = d
+        return prefix_list_response
 
     @property
     def additional_keys(self) -> list[str]:
