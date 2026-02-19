@@ -1,11 +1,40 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   contact:
     email: support@theidh.com
     name: API Support
   description: |
     The Industrial Data Hub Operational Techology (OT) API provides programmatic access to industrial data from The Indusrial Data Hub. This RESTful interface bridges modern web applications with high-performance time series data management, enabling efficient querying and analysis of historical industrial data.
-    ...existing description...
+
+    ## Overview
+    Operational data, especially the timeseries data, to be meaningful, must include context such as:
+
+    - The equipment, sensor type, and sensor location of the measurement
+    - The product the equipment was producing or the equipment state when the measurements were taken
+
+    Therefore, The Industrial Data Hub (IDH) organizes OT data in 4 "orthogonal" components. These components are designed to provide necessary context, and the data itself. These compoents are:
+
+    - Timeseries. Timeseries is all the sensor, equipment state, and other data that varies over time and is stored as a series of value, status, time triplets. Timeseries data is typically sourced from DCSs, SCADAs, and IIOT. Traditionally this data was stored in historians and indeed historians provide a common source of data to The IDH. The IDH has, and provides, advanced timeseries data storage and management. Timeseries data in The IDH are organized by "Tag". Tag is industry standard nomenclature; channels, signals, and points are synonyms for Tags.
+    - Units of Measure (UOM). The Timeseries support also includes a UOM system. The UOM system is provided by: "Copyright 2025 University Corporation for Atmospheric Research and contributors. All rights reserved." The UOM system is very flexible. It has an extensive base unit system and supports any derived units. Derived units can be any combination of products, inverse, powers, logs, and offset. Most expected syntaxes work. Use the APIs calls below to view and experiment with UOMs. All the get samples calls support supplying a from UOM and a to UOM. The from UOM is the presumed UOM the data is stored in the timeseries database. The timeseries database supports assigning a UOM to tags; however this is not a requirement. If the from UOM is empty, and the to UOM is provided, the get sample calls will try to lookup the stored UOM. The UOM system has the following disclaimer by UCAR: "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE SOFTWARE."
+    - Metadata. Metadata is the data about the timeseries data. Metadata in The IDH largely focuses on data provenance; where the data came from and all the related data available from the data source. The metadata is automaticaly maintained by The IDH as part of the data acquisition process. Users familiar with the data in the legacy sysystems, such as historians, will recognize their data because The IDH has all the data about the data. Metadata typically has references to timeseries tags.
+    - Assets. Assets allow for detailed equipment modeling including hierarchies and networks. Assets provide the means to tie timeseries/sensor data (tags!) to physical assets. There are no limits to the number of assets and the relations to the timeseries data. Assets can be organized and re-used in many different ways.
+    - Classifications. Classifications allow identifying what equipment was doing, the state, or the condition. Classifications can by anything they just need a start and end time. Optionally, classifications can reference Assets, Metadata, and Timeseries. Events and eventframes are typically used names for classifications; however Event is an overloaded term.
+
+    ## Administration
+    - **Admin. A set of apis are provided to check the health of The IDH and other system management tasks.
+
+    ## Key Features
+    - Impedance Match**: The IDH APIs do the heavy lifting. The goal is allowing data be queried in ways OT personnel understand *and* return the data ready to use in OT apps. OT personnel can then focus on their domain, not wrestling with data to feed to Numpy or Pytorch. Contact us below and tell how you want to use The IDH data if it is not easy enough.
+    - Metadata Discovery**: Query available time series by tags, retrieve units of measurement, engineering descriptions, and data type information
+    - Flexible Time Range Queries**: Retrieve samples with precise timestamp filtering, supporting both Unix epoch and ISO 8601 time formats
+    - Archive Management**: List available archives, query archive statistics, and access multiple data sources
+    - Data Retrieval**: Efficiently fetch time series samples with support for multiple series in a single request
+    - State and Tag Management**: Query system states and manage tag associations for organizing related time series
+    - Access data by familiar equipment names and organization.
+    - Use classifications to access data by state, production runs, failure modes and by what was happening rather than always needing to provide time.
+
+    ## Authentication & Security
+    All API endpoints require authentication via AWS Cognito JWT tokens. Clients must include a valid bearer token in the Authorization header for every request. The token should be prefixed with "Bearer " (e.g., "Bearer eyJhbGc..."). Tokens are validated against the Cognito JWKS (JSON Web Key Set) to ensure authenticity and proper authorization.
   license:
     name: The IDH License
     url: http://www.theidh.com/licenses/LICENSE-1.0.html
@@ -15,6 +44,7 @@ info:
 paths:
   /admin/health:
     get:
+      operationId: GetAdminHealth
       summary: Health check
       description: Get the health status of the API
       tags:
@@ -46,6 +76,7 @@ paths:
                 additionalProperties: true
   /admin/version:
     get:
+      operationId: GetAdminVersion
       summary: Get IDH App Server version
       description: Get the current version of the IDH App Server
       tags:
@@ -75,6 +106,7 @@ paths:
                 additionalProperties: true
   /api/v1/assets/rootassets:
     get:
+      operationId: GetRootAssets
       summary: Get all the root assets
       description: Get all the root assets
       tags:
@@ -98,6 +130,7 @@ paths:
 
   /api/v1/assets/{assetUUID}:
     get:
+      operationId: GetAssetByUUID
       summary: Get asset by UUID
       description: Get asset by UUID
       tags:
@@ -134,6 +167,7 @@ paths:
                 additionalProperties: true
   /api/v1/classifications{name}:
     get:
+      operationId: GetClassificationByName
       summary: Get classification by name
       description: Get classification by name
       tags:
@@ -170,8 +204,9 @@ paths:
                 additionalProperties: true
   /api/v1/metadata/sources:
     get:
+      operationId: ListSources
       summary: List all sources
-      description: Get list of all PI sources
+      description: Get list of all sources. Sources may be historians, SCADA, DCS, IIOT, or any source of data
       tags:
         - metadata
       security:
@@ -201,6 +236,7 @@ paths:
                 additionalProperties: true
   /api/v1/metadata/sources/{nameOrUUID}:
     get:
+      operationId: GetSourceByNameOrUuid
       summary: Get source by Name or UUID
       description: Get details for a specific source
       tags:
@@ -237,6 +273,7 @@ paths:
                 additionalProperties: true
   /api/v1/metadata/sources/srctags/{sourceUUID}:
     get:
+      operationId: GetSourceTags
       summary: Get source data tags for a specific source using a tag query
       description: Returns all source data tags for a specific source matching the query. Use [{}] as the query to return all tags for the source.
       tags:
@@ -286,6 +323,7 @@ paths:
                 additionalProperties: true
   /api/v1/metadata/sources/statesets/{sourceUUID}:
     get:
+      operationId: GetStateSets
       summary: Get a map of all state sets by id and name for a specific source
       description: Get a map of all state sets by id and name for a specific source
       tags:
@@ -325,6 +363,7 @@ paths:
 
   /api/v1/metadata/sources/statesets/name/{sourceUUID}:
     get:
+      operationId: GetStateSetByName
       summary: Get state set for a source by Name
       description: Get details for a specific state set by Name
       tags:
@@ -367,6 +406,7 @@ paths:
                 additionalProperties: true
   /api/v1/metadata/sources/statesets/id/{sourceUUID}:
     get:
+      operationId: GetStateSetById
       summary: Get state set for a source by ID
       description: Get details for a specific state set by ID
       tags:
@@ -409,8 +449,9 @@ paths:
                 additionalProperties: true
   /api/v1/timeseries/types:
     get:
-      summary: Get supported timeseries data types
-      description: Get supported timeseries data types
+      operationId: ListTimeseriesTypes
+      summary: List supported timeseries data types
+      description: List supported timeseries data types
       tags:
         - timeseries
       security:
@@ -433,6 +474,7 @@ paths:
                 additionalProperties: true
   /api/v1/timeseries/taginfo/{tagUUID}:
     get:
+      operationId: GetTagInfo
       summary: Get timeseries tag info by tag UUID
       description: Get timeseries tag info by tag UUID
       tags:
@@ -476,6 +518,7 @@ paths:
                 additionalProperties: true  
   /api/v1/timeseries/alltaginfo:
     get:
+      operationId: GetAllTagInfo
       summary: Get timeseries tag info for all tags
       description: Get timeseries tag info for all tags
       tags:
@@ -513,6 +556,7 @@ paths:
                 additionalProperties: true
   /api/v1/timeseries/tagsbysource/{sourceUUID}:
     get:
+      operationId: GetTagsBySource
       summary: Get timeseries tag UUIDs for a specific source
       description: Get timeseries tag UUIDs for a specific source
       tags:
@@ -561,6 +605,7 @@ paths:
                 additionalProperties: true
   /api/v1/timeseries/samples:
     get:
+      operationId: GetSamples
       summary: Get timeseries samples for tags
       description: Get samples (recorded data) for timeseries tags. Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
       tags:
@@ -636,6 +681,7 @@ paths:
                   type: string
   /api/v1/timeseries/plotsamples:
     get:
+      operationId: GetPlotSamples
       summary: Get plot timeseries samples for tags
       description: Get data for timeseries tags. Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
       tags:
@@ -711,6 +757,7 @@ paths:
                   type: string
   /api/v1/timeseries/aggregatesamples:
     get:
+      operationId: GetAggregateSamples
       summary: Get aggregate timeseries samples for tags
       description: Get data for timeseries tags aggregated. Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
       tags:
@@ -798,6 +845,7 @@ paths:
                   type: string
   /api/v1/timeseries/gridsamples:
     get:
+      operationId: GetGridSamples
       summary: Get grid timeseries samples for tags
       description: Get data for timeseries tags in a grid format (equally spaced samples, interpolated if needed). Supports both JSON and binary (MessagePack) formats. For binary, set Accept header to "application/msgpack"
       tags:
@@ -879,6 +927,7 @@ paths:
                   type: string
   /api/v1/timeseries/aggregateusageinfo:
     get:
+      operationId: GetAggregateUsageInfo
       summary: Get aggregate usage info for timeseries queries
       description: Get aggregate usage information. This is a short description of the various supported aggregation types and usage
       tags:
@@ -904,8 +953,9 @@ paths:
                   type: string  
   /api/v1/timeseries/aggregatetypes:
     get:
-      summary: Get supported aggregate types for timeseries queries
-      description: Get supported aggregate types for timeseries queries such as average, mean, total, sum, min, max, etc.
+      operationId: ListAggregateTypes
+      summary: List supported aggregate types for timeseries queries
+      description: List supported aggregate types for timeseries queries such as average, mean, total, sum, min, max, etc.
       tags:
         - timeseries
       security:
@@ -928,6 +978,7 @@ paths:
                 additionalProperties: true
   /api/v1/uom/prefixes:
     get:
+      operationId: ListPrefixes
       summary: Get list of supported unit of measure (UOM) prefixes for timeseries queries
       description: Get list of supported unit of measure (UOM) prefixes for timeseries queries such as kilo, milli, micro, etc.
       tags:
@@ -950,8 +1001,9 @@ paths:
                 additionalProperties: true  
   /api/v1/uom/uoms:
     get:
-      summary: Get list of supported unit of measures (UOMs) for timeseries queries
-      description: Get list of supported unit of measures (UOMs) for timeseries queries. Optionally filter by a search string that matches either the UOM name, symbol, or alias.
+      operationId: ListUoms
+      summary: List supported unit of measures (UOMs) for timeseries queries
+      description: List supported unit of measures (UOMs) for timeseries queries. Optionally filter by a search string that matches either the UOM name, symbol, or alias.
       tags:
         - uom
       security:
@@ -979,6 +1031,7 @@ paths:
                 additionalProperties: true
   /api/v1/uom/info/{uomName}:
     get:
+      operationId: GetUomInfo
       summary: Get unit of measure (UOM) details by name for timeseries queries
       description: Get unit of measure (UOM) details by name for timeseries queries. These are single UOMs, not derived UOMs like m/second.
       tags:
@@ -1015,6 +1068,7 @@ paths:
                 additionalProperties: true  
   /api/v1/uom/parse:
     get:
+      operationId: ParseUom
       summary: Parse a unit of measure (UOM) string into its components
       description: Parse a single unit of measure (UOM) string and display conversion information. Derived UOMs are not supported. .
       tags:
@@ -1051,6 +1105,7 @@ paths:
                 additionalProperties: true
   /api/v1/uom/convert:
     get:
+      operationId: ConvertUom
       summary: Convert a value from one unit of measure (UOM) to another
       description: Convert a value from one unit of measure (UOM) to another. For example, convert 100 from "km/h" to "m/s".
       tags:

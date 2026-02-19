@@ -6,19 +6,19 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'sdk')))
 from idh_ota_client.client import Client
-from idh_ota_client.api.assets import get_api_v1_assets_rootassets
-from idh_ota_client.api.assets import get_api_v_1_assets_asset_uuid
+from idh_ota_client.api.assets import get_root_assets
+from idh_ota_client.api.assets import get_asset_by_uuid
 from idh_ota_client.models import AssetResponse
 
 def main():
     # Set a breakpoint here to step through
     client = Client(base_url="http://localhost:8080")
     try:
-        root_assets = get_api_v1_assets_rootassets.sync(client=client)
+        root_assets = get_root_assets.sync(client=client)
         print("SDK parsed root assets response:", root_assets)
         first_asset = next(iter(root_assets.additional_properties)) if root_assets else None
         if first_asset:
-            asset_response: AssetResponse = get_api_v_1_assets_asset_uuid.sync(client=client, asset_uuid=first_asset)
+            asset_response: AssetResponse = get_asset_by_uuid.sync(client=client, asset_uuid=first_asset)
             print(f"SDK parsed asset response for UUID {first_asset}:", asset_response)
     except Exception as e:
         print("Exception during SDK call:", e)

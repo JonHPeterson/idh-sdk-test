@@ -6,7 +6,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'sdk')))
 from idh_ota_client.client import Client
-from idh_ota_client.api.classifications import get_api_v1_classificationsname
+from idh_ota_client.api.classifications import get_classification_by_name
 from idh_ota_client.models import ClassificationResponse
 
 def main():
@@ -14,7 +14,7 @@ def main():
     client = Client(base_url="http://localhost:8080")
     try:
         classification_name = "some_name"  # Replace with an actual classification name for testing
-        classifications_response: ClassificationResponse = get_api_v1_classificationsname.sync(client=client, name=classification_name)
+        classifications_response: ClassificationResponse = get_classification_by_name.sync(client=client, name=classification_name)
         print("SDK parsed classifications response:", classifications_response)
     except Exception as e:
         print("Exception during SDK call:", e)
