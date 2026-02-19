@@ -7,8 +7,8 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'sdk')))
 from idh_ota_client.client import Client
 from idh_ota_client.api.admin import get_admin_health
-from idh_ota_api_client.api.admin import get_admin_version
-from idh_ota_api_client.models import VersionInfoResponse
+from idh_ota_client.api.admin import get_admin_version
+from idh_ota_client.models import VersionInfoResponse
 
 def main():
     # Set a breakpoint here to step through

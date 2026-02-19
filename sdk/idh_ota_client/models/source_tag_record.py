@@ -5,7 +5,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
-    from ..models.source_tag_record_properties import SourceTagRecordProperties
+    from ..models.source_tag_record_fields import SourceTagRecordFields
 
 
 T = TypeVar("T", bound="SourceTagRecord")
@@ -19,13 +19,13 @@ class SourceTagRecord:
         src_uuid (str):
         src_data_uuid (str):
         src_tag_name (str):
-        properties (SourceTagRecordProperties): Map of properties as a set of name value pairs
+        fields (SourceTagRecordFields): Map of fields as a set of name value pairs
     """
 
     src_uuid: str
     src_data_uuid: str
     src_tag_name: str
-    properties: "SourceTagRecordProperties"
+    fields: "SourceTagRecordFields"
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -35,7 +35,7 @@ class SourceTagRecord:
 
         src_tag_name = self.src_tag_name
 
-        properties = self.properties.to_dict()
+        fields = self.fields.to_dict()
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -44,7 +44,7 @@ class SourceTagRecord:
                 "src_uuid": src_uuid,
                 "src_data_uuid": src_data_uuid,
                 "src_tag_name": src_tag_name,
-                "properties": properties,
+                "fields": fields,
             }
         )
 
@@ -52,7 +52,7 @@ class SourceTagRecord:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.source_tag_record_properties import SourceTagRecordProperties
+        from ..models.source_tag_record_fields import SourceTagRecordFields
 
         d = dict(src_dict)
         src_uuid = d.pop("src_uuid")
@@ -61,13 +61,13 @@ class SourceTagRecord:
 
         src_tag_name = d.pop("src_tag_name")
 
-        properties = SourceTagRecordProperties.from_dict(d.pop("properties"))
+        fields = SourceTagRecordFields.from_dict(d.pop("fields"))
 
         source_tag_record = cls(
             src_uuid=src_uuid,
             src_data_uuid=src_data_uuid,
             src_tag_name=src_tag_name,
-            properties=properties,
+            fields=fields,
         )
 
         source_tag_record.additional_properties = d

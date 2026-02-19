@@ -1,13 +1,10 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, cast
 
 import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.get_api_v1_timeseries_aggregateusageinfo_response_200 import (
-    GetApiV1TimeseriesAggregateusageinfoResponse200,
-)
 from ...models.get_api_v1_timeseries_aggregateusageinfo_response_500 import (
     GetApiV1TimeseriesAggregateusageinfoResponse500,
 )
@@ -25,9 +22,9 @@ def _get_kwargs() -> dict[str, Any]:
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]]:
+) -> Optional[Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]]:
     if response.status_code == 200:
-        response_200 = GetApiV1TimeseriesAggregateusageinfoResponse200.from_dict(response.json())
+        response_200 = cast(list[str], response.json())
 
         return response_200
 
@@ -44,7 +41,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]]:
+) -> Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -56,7 +53,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]]:
+) -> Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]]:
     """Get aggregate usage info for timeseries queries
 
      Get aggregate usage information. This is a short description of the various supported aggregation
@@ -67,7 +64,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]]
+        Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]]
     """
 
     kwargs = _get_kwargs()
@@ -82,7 +79,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]]:
+) -> Optional[Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]]:
     """Get aggregate usage info for timeseries queries
 
      Get aggregate usage information. This is a short description of the various supported aggregation
@@ -93,7 +90,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]
+        Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]
     """
 
     return sync_detailed(
@@ -104,7 +101,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]]:
+) -> Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]]:
     """Get aggregate usage info for timeseries queries
 
      Get aggregate usage information. This is a short description of the various supported aggregation
@@ -115,7 +112,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]]
+        Response[Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]]
     """
 
     kwargs = _get_kwargs()
@@ -128,7 +125,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]]:
+) -> Optional[Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]]:
     """Get aggregate usage info for timeseries queries
 
      Get aggregate usage information. This is a short description of the various supported aggregation
@@ -139,7 +136,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[GetApiV1TimeseriesAggregateusageinfoResponse200, GetApiV1TimeseriesAggregateusageinfoResponse500]
+        Union[GetApiV1TimeseriesAggregateusageinfoResponse500, list[str]]
     """
 
     return (

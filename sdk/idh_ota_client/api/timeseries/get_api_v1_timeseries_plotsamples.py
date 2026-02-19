@@ -16,9 +16,9 @@ def _get_kwargs(
     endtime: str,
     lanes: int,
     max_samples: int,
-    tag_uui_ds: list[str],
-    from_units: Union[Unset, list[str]] = UNSET,
-    to_units: Union[Unset, list[str]] = UNSET,
+    tag_uuids: list[str],
+    from_uoms: Union[Unset, list[str]] = UNSET,
+    to_uoms: Union[Unset, list[str]] = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -30,21 +30,21 @@ def _get_kwargs(
 
     params["maxSamples"] = max_samples
 
-    json_tag_uui_ds = tag_uui_ds
+    json_tag_uuids = tag_uuids
 
-    params["tagUUIDs"] = json_tag_uui_ds
+    params["tagUuids"] = json_tag_uuids
 
-    json_from_units: Union[Unset, list[str]] = UNSET
-    if not isinstance(from_units, Unset):
-        json_from_units = from_units
+    json_from_uoms: Union[Unset, list[str]] = UNSET
+    if not isinstance(from_uoms, Unset):
+        json_from_uoms = from_uoms
 
-    params["fromUnits"] = json_from_units
+    params["fromUoms"] = json_from_uoms
 
-    json_to_units: Union[Unset, list[str]] = UNSET
-    if not isinstance(to_units, Unset):
-        json_to_units = to_units
+    json_to_uoms: Union[Unset, list[str]] = UNSET
+    if not isinstance(to_uoms, Unset):
+        json_to_uoms = to_uoms
 
-    params["toUnits"] = json_to_units
+    params["toUoms"] = json_to_uoms
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -94,9 +94,9 @@ def sync_detailed(
     endtime: str,
     lanes: int,
     max_samples: int,
-    tag_uui_ds: list[str],
-    from_units: Union[Unset, list[str]] = UNSET,
-    to_units: Union[Unset, list[str]] = UNSET,
+    tag_uuids: list[str],
+    from_uoms: Union[Unset, list[str]] = UNSET,
+    to_uoms: Union[Unset, list[str]] = UNSET,
 ) -> Response[Union[GetApiV1TimeseriesPlotsamplesResponse500, TimeSeriesSamplesResponse]]:
     r"""Get plot timeseries samples for tags
 
@@ -108,9 +108,9 @@ def sync_detailed(
         endtime (str):
         lanes (int):
         max_samples (int):
-        tag_uui_ds (list[str]):
-        from_units (Union[Unset, list[str]]):
-        to_units (Union[Unset, list[str]]):
+        tag_uuids (list[str]):
+        from_uoms (Union[Unset, list[str]]):
+        to_uoms (Union[Unset, list[str]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -125,9 +125,9 @@ def sync_detailed(
         endtime=endtime,
         lanes=lanes,
         max_samples=max_samples,
-        tag_uui_ds=tag_uui_ds,
-        from_units=from_units,
-        to_units=to_units,
+        tag_uuids=tag_uuids,
+        from_uoms=from_uoms,
+        to_uoms=to_uoms,
     )
 
     response = client.get_httpx_client().request(
@@ -144,9 +144,9 @@ def sync(
     endtime: str,
     lanes: int,
     max_samples: int,
-    tag_uui_ds: list[str],
-    from_units: Union[Unset, list[str]] = UNSET,
-    to_units: Union[Unset, list[str]] = UNSET,
+    tag_uuids: list[str],
+    from_uoms: Union[Unset, list[str]] = UNSET,
+    to_uoms: Union[Unset, list[str]] = UNSET,
 ) -> Optional[Union[GetApiV1TimeseriesPlotsamplesResponse500, TimeSeriesSamplesResponse]]:
     r"""Get plot timeseries samples for tags
 
@@ -158,9 +158,9 @@ def sync(
         endtime (str):
         lanes (int):
         max_samples (int):
-        tag_uui_ds (list[str]):
-        from_units (Union[Unset, list[str]]):
-        to_units (Union[Unset, list[str]]):
+        tag_uuids (list[str]):
+        from_uoms (Union[Unset, list[str]]):
+        to_uoms (Union[Unset, list[str]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -176,9 +176,9 @@ def sync(
         endtime=endtime,
         lanes=lanes,
         max_samples=max_samples,
-        tag_uui_ds=tag_uui_ds,
-        from_units=from_units,
-        to_units=to_units,
+        tag_uuids=tag_uuids,
+        from_uoms=from_uoms,
+        to_uoms=to_uoms,
     ).parsed
 
 
@@ -189,9 +189,9 @@ async def asyncio_detailed(
     endtime: str,
     lanes: int,
     max_samples: int,
-    tag_uui_ds: list[str],
-    from_units: Union[Unset, list[str]] = UNSET,
-    to_units: Union[Unset, list[str]] = UNSET,
+    tag_uuids: list[str],
+    from_uoms: Union[Unset, list[str]] = UNSET,
+    to_uoms: Union[Unset, list[str]] = UNSET,
 ) -> Response[Union[GetApiV1TimeseriesPlotsamplesResponse500, TimeSeriesSamplesResponse]]:
     r"""Get plot timeseries samples for tags
 
@@ -203,9 +203,9 @@ async def asyncio_detailed(
         endtime (str):
         lanes (int):
         max_samples (int):
-        tag_uui_ds (list[str]):
-        from_units (Union[Unset, list[str]]):
-        to_units (Union[Unset, list[str]]):
+        tag_uuids (list[str]):
+        from_uoms (Union[Unset, list[str]]):
+        to_uoms (Union[Unset, list[str]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -220,9 +220,9 @@ async def asyncio_detailed(
         endtime=endtime,
         lanes=lanes,
         max_samples=max_samples,
-        tag_uui_ds=tag_uui_ds,
-        from_units=from_units,
-        to_units=to_units,
+        tag_uuids=tag_uuids,
+        from_uoms=from_uoms,
+        to_uoms=to_uoms,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -237,9 +237,9 @@ async def asyncio(
     endtime: str,
     lanes: int,
     max_samples: int,
-    tag_uui_ds: list[str],
-    from_units: Union[Unset, list[str]] = UNSET,
-    to_units: Union[Unset, list[str]] = UNSET,
+    tag_uuids: list[str],
+    from_uoms: Union[Unset, list[str]] = UNSET,
+    to_uoms: Union[Unset, list[str]] = UNSET,
 ) -> Optional[Union[GetApiV1TimeseriesPlotsamplesResponse500, TimeSeriesSamplesResponse]]:
     r"""Get plot timeseries samples for tags
 
@@ -251,9 +251,9 @@ async def asyncio(
         endtime (str):
         lanes (int):
         max_samples (int):
-        tag_uui_ds (list[str]):
-        from_units (Union[Unset, list[str]]):
-        to_units (Union[Unset, list[str]]):
+        tag_uuids (list[str]):
+        from_uoms (Union[Unset, list[str]]):
+        to_uoms (Union[Unset, list[str]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -270,8 +270,8 @@ async def asyncio(
             endtime=endtime,
             lanes=lanes,
             max_samples=max_samples,
-            tag_uui_ds=tag_uui_ds,
-            from_units=from_units,
-            to_units=to_units,
+            tag_uuids=tag_uuids,
+            from_uoms=from_uoms,
+            to_uoms=to_uoms,
         )
     ).parsed

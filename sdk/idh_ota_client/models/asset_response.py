@@ -6,7 +6,7 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.asset_response_aliases import AssetResponseAliases
-    from ..models.asset_response_properties import AssetResponseProperties
+    from ..models.asset_response_fields import AssetResponseFields
 
 
 T = TypeVar("T", bound="AssetResponse")
@@ -20,7 +20,7 @@ class AssetResponse:
         asset_uuid (str):
         asset_name (str):
         aliases (AssetResponseAliases): Mapping of alias names to UUIDs
-        properties (AssetResponseProperties): Mapping of property names to values
+        fields (AssetResponseFields): Mapping of field names to values
         parent_assets (list[str]):
         child_assets (list[str]):
     """
@@ -28,7 +28,7 @@ class AssetResponse:
     asset_uuid: str
     asset_name: str
     aliases: "AssetResponseAliases"
-    properties: "AssetResponseProperties"
+    fields: "AssetResponseFields"
     parent_assets: list[str]
     child_assets: list[str]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -40,7 +40,7 @@ class AssetResponse:
 
         aliases = self.aliases.to_dict()
 
-        properties = self.properties.to_dict()
+        fields = self.fields.to_dict()
 
         parent_assets = self.parent_assets
 
@@ -53,7 +53,7 @@ class AssetResponse:
                 "asset_uuid": asset_uuid,
                 "asset_name": asset_name,
                 "aliases": aliases,
-                "properties": properties,
+                "fields": fields,
                 "parent_assets": parent_assets,
                 "child_assets": child_assets,
             }
@@ -64,7 +64,7 @@ class AssetResponse:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.asset_response_aliases import AssetResponseAliases
-        from ..models.asset_response_properties import AssetResponseProperties
+        from ..models.asset_response_fields import AssetResponseFields
 
         d = dict(src_dict)
         asset_uuid = d.pop("asset_uuid")
@@ -73,7 +73,7 @@ class AssetResponse:
 
         aliases = AssetResponseAliases.from_dict(d.pop("aliases"))
 
-        properties = AssetResponseProperties.from_dict(d.pop("properties"))
+        fields = AssetResponseFields.from_dict(d.pop("fields"))
 
         parent_assets = cast(list[str], d.pop("parent_assets"))
 
@@ -83,7 +83,7 @@ class AssetResponse:
             asset_uuid=asset_uuid,
             asset_name=asset_name,
             aliases=aliases,
-            properties=properties,
+            fields=fields,
             parent_assets=parent_assets,
             child_assets=child_assets,
         )

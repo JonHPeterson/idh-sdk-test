@@ -4,12 +4,12 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="AssetResponseProperties")
+T = TypeVar("T", bound="SourceTagRecordFields")
 
 
 @_attrs_define
-class AssetResponseProperties:
-    """Mapping of property names to values"""
+class SourceTagRecordFields:
+    """Map of fields as a set of name value pairs"""
 
     additional_properties: dict[str, str] = _attrs_field(init=False, factory=dict)
 
@@ -22,10 +22,10 @@ class AssetResponseProperties:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        asset_response_properties = cls()
+        source_tag_record_fields = cls()
 
-        asset_response_properties.additional_properties = d
-        return asset_response_properties
+        source_tag_record_fields.additional_properties = d
+        return source_tag_record_fields
 
     @property
     def additional_keys(self) -> list[str]:

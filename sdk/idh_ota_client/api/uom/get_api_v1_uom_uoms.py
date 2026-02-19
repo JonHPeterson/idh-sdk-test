@@ -16,7 +16,7 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
-    params["filter_string"] = filter_string
+    params["filterString"] = filter_string
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 

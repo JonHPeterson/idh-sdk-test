@@ -4,12 +4,12 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="GetApiV1TimeseriesAggregateusageinfoResponse200")
+T = TypeVar("T", bound="SourcesResponseFields")
 
 
 @_attrs_define
-class GetApiV1TimeseriesAggregateusageinfoResponse200:
-    """ """
+class SourcesResponseFields:
+    """Map of fields as a set of name value pairs"""
 
     additional_properties: dict[str, str] = _attrs_field(init=False, factory=dict)
 
@@ -22,10 +22,10 @@ class GetApiV1TimeseriesAggregateusageinfoResponse200:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        get_api_v1_timeseries_aggregateusageinfo_response_200 = cls()
+        sources_response_fields = cls()
 
-        get_api_v1_timeseries_aggregateusageinfo_response_200.additional_properties = d
-        return get_api_v1_timeseries_aggregateusageinfo_response_200
+        sources_response_fields.additional_properties = d
+        return sources_response_fields
 
     @property
     def additional_keys(self) -> list[str]:

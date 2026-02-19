@@ -1,8 +1,12 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
+
+if TYPE_CHECKING:
+    from ..models.sources_response_fields import SourcesResponseFields
+
 
 T = TypeVar("T", bound="SourcesResponse")
 
@@ -14,12 +18,12 @@ class SourcesResponse:
     Attributes:
         src_uuid (str):
         src_name (str):
-        properties (str): Optional properties in JSON format
+        fields (SourcesResponseFields): Map of fields as a set of name value pairs
     """
 
     src_uuid: str
     src_name: str
-    properties: str
+    fields: "SourcesResponseFields"
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -27,7 +31,7 @@ class SourcesResponse:
 
         src_name = self.src_name
 
-        properties = self.properties
+        fields = self.fields.to_dict()
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -35,7 +39,7 @@ class SourcesResponse:
             {
                 "src_uuid": src_uuid,
                 "src_name": src_name,
-                "properties": properties,
+                "fields": fields,
             }
         )
 
@@ -43,17 +47,19 @@ class SourcesResponse:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.sources_response_fields import SourcesResponseFields
+
         d = dict(src_dict)
         src_uuid = d.pop("src_uuid")
 
         src_name = d.pop("src_name")
 
-        properties = d.pop("properties")
+        fields = SourcesResponseFields.from_dict(d.pop("fields"))
 
         sources_response = cls(
             src_uuid=src_uuid,
             src_name=src_name,
-            properties=properties,
+            fields=fields,
         )
 
         sources_response.additional_properties = d

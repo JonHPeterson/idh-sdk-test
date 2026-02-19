@@ -586,7 +586,7 @@ paths:
           schema:
             type: integer
           description: Maximum number of samples to retrieve per tag
-        - name: tagUUIDs
+        - name: tagUuids
           in: query
           required: true
           schema:
@@ -596,7 +596,7 @@ paths:
           style: form
           explode: true
           description: List of Tag UUIDs
-        - name: fromUnits
+        - name: fromUoms
           in: query
           required: false
           schema:
@@ -606,7 +606,7 @@ paths:
           style: form
           explode: true
           description: List of units to convert from, one per tagUUID
-        - name: toUnits
+        - name: toUoms
           in: query
           required: false
           schema:
@@ -667,7 +667,7 @@ paths:
           schema:
             type: integer
           description: Maximum number of samples to retrieve per tag
-        - name: tagUUIDs
+        - name: tagUuids
           in: query
           required: true
           schema:
@@ -675,7 +675,7 @@ paths:
             items:
               type: string
           description: List of Tag UUIDs
-        - name: fromUnits
+        - name: fromUoms
           in: query
           required: false
           schema:
@@ -683,7 +683,7 @@ paths:
             items:
               type: string
           description: List of units to convert from, one per tagUUID
-        - name: toUnits
+        - name: toUoms
           in: query
           required: false
           schema:
@@ -730,7 +730,7 @@ paths:
           schema:
             type: string
           description: End Time in ISO8601 format
-        - name: aggregate_type
+        - name: aggregateType
           in: query
           required: true
           schema:
@@ -748,7 +748,7 @@ paths:
           schema:
             type: integer
           description: Maximum number of samples to retrieve per tag
-        - name: tagUUIDs
+        - name: tagUuids
           in: query
           required: true
           schema:
@@ -758,7 +758,7 @@ paths:
           style: form
           explode: true
           description: List of Tag UUIDs
-        - name: fromUnits
+        - name: fromUoms
           in: query
           required: false
           schema:
@@ -768,7 +768,7 @@ paths:
           style: form
           explode: true
           description: List of units to convert from, one per tagUUID
-        - name: toUnits
+        - name: toUoms
           in: query
           required: false
           schema:
@@ -829,7 +829,7 @@ paths:
           schema:
             type: integer
           description: Maximum number of samples to retrieve per tag
-        - name: tagUUIDs
+        - name: tagUuids
           in: query
           required: true
           schema:
@@ -839,7 +839,7 @@ paths:
           style: form
           explode: true
           description: List of Tag UUIDs
-        - name: fromUnits
+        - name: fromUoms
           in: query
           required: false
           schema:
@@ -849,7 +849,7 @@ paths:
           style: form
           explode: true
           description: List of units to convert from, one per tagUUID
-        - name: toUnits
+        - name: toUoms
           in: query
           required: false
           schema:
@@ -891,8 +891,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties:
+                type: array
+                items:
                   type: string
         '500':
           description: Internal server error
@@ -957,7 +957,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: filter_string
+        - name: filterString
           in: query
           required: true
           schema:
@@ -977,7 +977,7 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/uom/info/{uom_name}:
+  /api/v1/uom/info/{uomName}:
     get:
       summary: Get unit of measure (UOM) details by name for timeseries queries
       description: Get unit of measure (UOM) details by name for timeseries queries. These are single UOMs, not derived UOMs like m/second.
@@ -986,7 +986,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: uom_name
+        - name: uomName
           in: path
           required: true
           schema:
@@ -1022,7 +1022,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: uom_string
+        - name: uomString
           in: query
           required: true
           schema:
@@ -1126,16 +1126,16 @@ components:
           type: string
         src_tag_name:
           type: string
-        properties:
+        fields:
           type: object
           additionalProperties:
             type: string
-          description: Map of properties as a set of name value pairs
+          description: Map of fields as a set of name value pairs
       required:
         - src_uuid
         - src_data_uuid
         - src_tag_name
-        - properties
+        - fields
       description: Source tag record
     SourceTagRecords:
       type: object
@@ -1175,13 +1175,15 @@ components:
           type: string
         src_name:
           type: string
-        properties:
-          type: string
-          description: Optional properties in JSON format
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+          description: Map of fields as a set of name value pairs
       required:
         - src_uuid
         - src_name
-        - properties
+        - fields
       description: Source details response
     ClassificationResponse:
       type: object
@@ -1206,9 +1208,9 @@ components:
           description: Mapping of alias names to UUIDs
           additionalProperties:
             type: string
-        properties:
+        fields:
           type: object
-          description: Mapping of property names to values
+          description: Mapping of field names to values
           additionalProperties:
             type: string
         parent_assets:
@@ -1223,7 +1225,7 @@ components:
         - asset_uuid
         - asset_name
         - aliases
-        - properties
+        - fields
         - parent_assets
         - child_assets
       description: Asset details response

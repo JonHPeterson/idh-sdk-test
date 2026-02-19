@@ -2,7 +2,7 @@
 
 from .asset_response import AssetResponse
 from .asset_response_aliases import AssetResponseAliases
-from .asset_response_properties import AssetResponseProperties
+from .asset_response_fields import AssetResponseFields
 from .classification_response import ClassificationResponse
 from .get_admin_health_response_404 import GetAdminHealthResponse404
 from .get_admin_health_response_500 import GetAdminHealthResponse500
@@ -51,7 +51,6 @@ from .get_api_v1_metadata_sources_statesets_source_uuid_response_500 import (
 from .get_api_v1_timeseries_aggregatesamples_response_500 import GetApiV1TimeseriesAggregatesamplesResponse500
 from .get_api_v1_timeseries_aggregatetypes_response_200 import GetApiV1TimeseriesAggregatetypesResponse200
 from .get_api_v1_timeseries_aggregatetypes_response_500 import GetApiV1TimeseriesAggregatetypesResponse500
-from .get_api_v1_timeseries_aggregateusageinfo_response_200 import GetApiV1TimeseriesAggregateusageinfoResponse200
 from .get_api_v1_timeseries_aggregateusageinfo_response_500 import GetApiV1TimeseriesAggregateusageinfoResponse500
 from .get_api_v1_timeseries_alltaginfo_response_200 import GetApiV1TimeseriesAlltaginfoResponse200
 from .get_api_v1_timeseries_alltaginfo_response_500 import GetApiV1TimeseriesAlltaginfoResponse500
@@ -84,9 +83,10 @@ from .parse_uom_result import ParseUOMResult
 from .prefix_list_response import PrefixListResponse
 from .root_assets_response import RootAssetsResponse
 from .source_tag_record import SourceTagRecord
-from .source_tag_record_properties import SourceTagRecordProperties
+from .source_tag_record_fields import SourceTagRecordFields
 from .source_tag_records import SourceTagRecords
 from .sources_response import SourcesResponse
+from .sources_response_fields import SourcesResponseFields
 from .time_series_sample import TimeSeriesSample
 from .time_series_samples_response import TimeSeriesSamplesResponse
 from .time_series_samples_response_data import TimeSeriesSamplesResponseData
@@ -99,7 +99,7 @@ from .version_info_response import VersionInfoResponse
 __all__ = (
     "AssetResponse",
     "AssetResponseAliases",
-    "AssetResponseProperties",
+    "AssetResponseFields",
     "ClassificationResponse",
     "GetAdminHealthResponse404",
     "GetAdminHealthResponse500",
@@ -128,7 +128,6 @@ __all__ = (
     "GetApiV1TimeseriesAggregatesamplesResponse500",
     "GetApiV1TimeseriesAggregatetypesResponse200",
     "GetApiV1TimeseriesAggregatetypesResponse500",
-    "GetApiV1TimeseriesAggregateusageinfoResponse200",
     "GetApiV1TimeseriesAggregateusageinfoResponse500",
     "GetApiV1TimeseriesAlltaginfoResponse200",
     "GetApiV1TimeseriesAlltaginfoResponse500",
@@ -157,8 +156,9 @@ __all__ = (
     "PrefixListResponse",
     "RootAssetsResponse",
     "SourcesResponse",
+    "SourcesResponseFields",
     "SourceTagRecord",
-    "SourceTagRecordProperties",
+    "SourceTagRecordFields",
     "SourceTagRecords",
     "TimeSeriesSample",
     "TimeSeriesSamplesResponse",
