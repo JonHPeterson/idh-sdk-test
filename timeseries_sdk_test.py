@@ -13,6 +13,7 @@ from idh_ota_client.api.timeseries import list_aggregate_types
 from idh_ota_client.api.timeseries import get_aggregate_usage_info
 from idh_ota_client.api.timeseries import list_timeseries_types
 from idh_ota_client.api.timeseries import get_tag_info
+from idh_ota_client.api.timeseries import get_all_tag_info
 from idh_ota_client.api.timeseries import get_samples
 from idh_ota_client.api.timeseries import get_plot_samples
 from idh_ota_client.api.timeseries import get_aggregate_samples
@@ -84,6 +85,8 @@ def test_helper_funcs(client: Client):
 def main():
     # Set a breakpoint here to step through
     client = Client(base_url="http://localhost:8080")
+    all_tag_info_response = get_all_tag_info.sync(client=client, start_position=0, max_results=10)
+    print(all_tag_info_response)
     test_helper_funcs(client)
     max_samples = 100000
     tag_uuids = get_two_tags(client)
@@ -107,6 +110,9 @@ def main():
     import httpx
     with httpx.Client() as http_client:
         # tag info raw response for debugging
+        raw_all_tag_info = http_client.get(f"http://localhost:8080/api/v1/timeseries/taginfo?start_position=0&max_results=10")
+        print(f"\nRaw timeseries all tag info response text:")
+        print(raw_all_tag_info.text)
         raw_tag_info = http_client.get(f"http://localhost:8080/api/v1/timeseries/taginfo/{tag_uuids[0]}")
         print(f"\nRaw timeseries tag info response text for tag UUID {tag_uuids[0]}:")
         print(raw_tag_info.text) 

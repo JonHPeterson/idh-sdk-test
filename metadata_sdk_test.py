@@ -25,18 +25,18 @@ def main():
             source_response = get_source_by_name_or_uuid.sync(client=client, name_or_uuid=first_source)
             print(f"SDK parsed metadata source response for name or UUID {first_source}:", source_response)
             query = '[{}]'  # empty is everything
-            src_tags_response = get_source_tags.sync(client=client, source_uuid=first_source, query=query)
+            src_tags_response = get_source_tags.sync(client=client, src_uuid=first_source, query=query)
             print(f"SDK parsed metadata source tags response for source UUID {first_source}:", src_tags_response)
-            state_sets = get_state_sets.sync(client=client, source_uuid=first_source)
+            state_sets = get_state_sets.sync(client=client, src_uuid=first_source)
             print(f"SDK parsed metadata source state sets response for source UUID {first_source}:", state_sets)
             # get the id (key) and name (value) of the first state_sets 
             if state_sets and state_sets.additional_properties:
                 last_item = list(state_sets.additional_properties.items())[-1]
                 last_state_set_id, last_state_set_name = last_item
                 print(f"Last state set ID: {last_state_set_id}, name: {last_state_set_name}")
-                by_name = get_state_set_by_name.sync(client=client, source_uuid=first_source, name=last_state_set_name)
+                by_name = get_state_set_by_name.sync(client=client, src_uuid=first_source, name=last_state_set_name)
                 print(f"SDK parsed metadata source state set response for source UUID {first_source} and state set name {last_state_set_name}:", by_name)
-                by_id = get_state_set_by_id.sync(client=client, source_uuid=first_source, id=last_state_set_id)
+                by_id = get_state_set_by_id.sync(client=client, src_uuid=first_source, id=last_state_set_id)
                 print(f"SDK parsed metadata source state set response for source UUID {first_source} and state set ID {last_state_set_id}:", by_id)
 
     except Exception as e:

@@ -115,7 +115,7 @@ paths:
         - BearerAuth: []
       responses:
         '200':
-          description: Map of asset UUIDs to asset names (or similar)
+          description: Map of asset Uuids to asset names (or similar)
           content:
             application/json:
               schema:
@@ -128,22 +128,22 @@ paths:
                 type: object
                 additionalProperties: true
 
-  /api/v1/assets/{assetUUID}:
+  /api/v1/assets/{assetUuid}:
     get:
-      operationId: GetAssetByUUID
-      summary: Get asset by UUID
-      description: Get asset by UUID
+      operationId: GetAssetByUuid
+      summary: Get asset by Uuid
+      description: Get asset by Uuid
       tags:
         - assets
       security:
         - BearerAuth: []
       parameters:
-        - name: assetUUID
+        - name: assetUuid
           in: path
           required: true
           schema:
             type: string
-          description: Asset UUID
+          description: Asset Uuid
       responses:
         '200':
           description: Asset details
@@ -234,22 +234,22 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/metadata/sources/{nameOrUUID}:
+  /api/v1/metadata/sources/{nameOrUuid}:
     get:
       operationId: GetSourceByNameOrUuid
-      summary: Get source by Name or UUID
+      summary: Get source by Name or Uuid
       description: Get details for a specific source
       tags:
         - metadata
       security:
         - BearerAuth: []
       parameters:
-        - name: nameOrUUID
+        - name: nameOrUuid
           in: path
           required: true
           schema:
             type: string
-          description: Source Name or UUID
+          description: Source Name or Uuid
       responses:
         '200':
           description: Source details
@@ -271,7 +271,7 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/metadata/sources/srctags/{sourceUUID}:
+  /api/v1/metadata/sources/srctags/{srcUuid}:
     get:
       operationId: GetSourceTags
       summary: Get source data tags for a specific source using a tag query
@@ -281,12 +281,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: sourceUUID
+        - name: srcUuid
           in: path
           required: true
           schema:
             type: string
-          description: Source UUID
+          description: Source Uuid
         - name: query
           in: query
           required: true
@@ -321,7 +321,7 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/metadata/sources/statesets/{sourceUUID}:
+  /api/v1/metadata/sources/statesets/{srcUuid}:
     get:
       operationId: GetStateSets
       summary: Get a map of all state sets by id and name for a specific source
@@ -331,12 +331,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: sourceUUID
+        - name: srcUuid
           in: path
           required: true
           schema:
             type: string
-          description: Source UUID
+          description: Source Uuid
       responses:
         '200':
           description: Map of state set IDs to names
@@ -361,7 +361,7 @@ paths:
                 type: object
                 additionalProperties: true
 
-  /api/v1/metadata/sources/statesets/name/{sourceUUID}:
+  /api/v1/metadata/sources/statesets/name/{srcUuid}:
     get:
       operationId: GetStateSetByName
       summary: Get state set for a source by Name
@@ -371,12 +371,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: sourceUUID
+        - name: srcUuid
           in: path
           required: true
           schema:
             type: string
-          description: Source UUID
+          description: Source Uuid
         - name: name
           in: query
           required: true
@@ -404,7 +404,7 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/metadata/sources/statesets/id/{sourceUUID}:
+  /api/v1/metadata/sources/statesets/id/{srcUuid}:
     get:
       operationId: GetStateSetById
       summary: Get state set for a source by ID
@@ -414,12 +414,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: sourceUUID
+        - name: srcUuid
           in: path
           required: true
           schema:
             type: string
-          description: Source UUID
+          description: Source Uuid
         - name: id
           in: query
           required: true
@@ -472,22 +472,22 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/timeseries/taginfo/{tagUUID}:
+  /api/v1/timeseries/taginfo/{tagUuid}:
     get:
       operationId: GetTagInfo
-      summary: Get timeseries tag info by tag UUID
-      description: Get timeseries tag info by tag UUID
+      summary: Get timeseries tag info by tag Uuid
+      description: Get timeseries tag info by tag Uuid
       tags:
         - timeseries
       security:
         - BearerAuth: []
       parameters:
-        - name: tagUUID
+        - name: tagUuid
           in: path
           required: true
           schema:
             type: string
-          description: Tag UUID
+          description: Tag Uuid
       responses:
         '200':
           description: Timeseries tag info details
@@ -540,13 +540,11 @@ paths:
           description: Maximum number of tags to return (default 100)
       responses:
         '200':
-          description: Array of Map of Tag UUIDs to their info details
+          description: A table of tag info details. The table is a set of columns as arrays.
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/TSGetTagInfoResponses'
+                $ref: '#/components/schemas/TSGetTagInfoTable'
         '500':
           description: Internal server error
           content:
@@ -554,23 +552,23 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/timeseries/tagsbysource/{sourceUUID}:
+  /api/v1/timeseries/tagsbysource/{srcUuid}:
     get:
       operationId: GetTagsBySource
-      summary: Get timeseries tag UUIDs for a specific source
-      description: Get timeseries tag UUIDs for a specific source
+      summary: Get timeseries tag Uuids for a specific source
+      description: Get timeseries tag Uuids for a specific source
       tags:
         - timeseries
       security:
         - BearerAuth: []
       parameters:
-        - name: sourceUUID
+        - name: srcUuid
           in: path
           required: true
           schema:
             type: string
-          description: Source UUID
-        - name: srcDataUUIDs
+          description: Source Uuid
+        - name: srcDataUuids
           in: query
           required: false
           schema:
@@ -579,10 +577,10 @@ paths:
               type: string
           style: form
           explode: true
-          description: list of source data UUIDs
+          description: list of source data Uuids
       responses:
         '200':
-          description: List of Tag UUIDs for the specified source and src data uuids
+          description: List of Tag Uuids for the specified source and src data Uuids
           content:
             application/json:
               schema:
@@ -640,7 +638,7 @@ paths:
               type: string
           style: form
           explode: true
-          description: List of Tag UUIDs
+          description: List of Tag Uuids
         - name: fromUoms
           in: query
           required: false
@@ -650,7 +648,7 @@ paths:
               type: string
           style: form
           explode: true
-          description: List of units to convert from, one per tagUUID
+          description: List of units to convert from, one per tagUuid
         - name: toUoms
           in: query
           required: false
@@ -660,7 +658,7 @@ paths:
               type: string
           style: form
           explode: true
-          description: List of units to convert to, one per tagUUID
+          description: List of units to convert to, one per tagUuid
       responses:
         '200':
           description: Successful response
@@ -720,7 +718,7 @@ paths:
             type: array
             items:
               type: string
-          description: List of Tag UUIDs
+          description: List of Tag Uuids
         - name: fromUoms
           in: query
           required: false
@@ -728,7 +726,7 @@ paths:
             type: array
             items:
               type: string
-          description: List of units to convert from, one per tagUUID
+          description: List of units to convert from, one per tagUuid
         - name: toUoms
           in: query
           required: false
@@ -736,7 +734,7 @@ paths:
             type: array
             items:
               type: string
-          description: List of units to convert to, one per tagUUID
+          description: List of units to convert to, one per tagUuid
       responses:
         "200":
           description: Successful response
@@ -804,7 +802,7 @@ paths:
               type: string
           style: form
           explode: true
-          description: List of Tag UUIDs
+          description: List of Tag Uuids
         - name: fromUoms
           in: query
           required: false
@@ -814,7 +812,7 @@ paths:
               type: string
           style: form
           explode: true
-          description: List of units to convert from, one per tagUUID
+          description: List of units to convert from, one per tagUuid
         - name: toUoms
           in: query
           required: false
@@ -824,7 +822,7 @@ paths:
               type: string
           style: form
           explode: true
-          description: List of units to convert to, one per tagUUID
+          description: List of units to convert to, one per tagUuid
       responses:
         '200':
           description: Successful response
@@ -886,7 +884,7 @@ paths:
               type: string
           style: form
           explode: true
-          description: List of Tag UUIDs
+          description: List of Tag Uuids
         - name: fromUoms
           in: query
           required: false
@@ -896,7 +894,7 @@ paths:
               type: string
           style: form
           explode: true
-          description: List of units to convert from, one per tagUUID
+          description: List of units to convert from, one per tagUuid
         - name: toUoms
           in: query
           required: false
@@ -906,7 +904,7 @@ paths:
               type: string
           style: form
           explode: true
-          description: List of units to convert to, one per tagUUID
+          description: List of units to convert to, one per tagUuid
       responses:
         '200':
           description: Successful response
@@ -1195,13 +1193,13 @@ components:
     SourceTagRecords:
       type: object
       properties:
-        source_tags:
+        src_tags:
           type: array
           items:
             $ref: '#/components/schemas/SourceTagRecord'
           description: Array of source tag records
       required:
-        - source_tags
+        - src_tags
       description: Object containing array of source tag records
     MDStateSet:
       type: object
@@ -1260,7 +1258,7 @@ components:
           type: string
         aliases:
           type: object
-          description: Mapping of alias names to UUIDs
+          description: Mapping of alias names to Uuids
           additionalProperties:
             type: string
         fields:
@@ -1289,9 +1287,9 @@ components:
       properties:
         tag_uuid:
           type: string
-        source_uuid:
+        src_uuid:
           type: string
-        source_data_uuid:
+        src_data_uuid:
           type: string
         data_type:
           type: integer
@@ -1305,18 +1303,60 @@ components:
           type: string
       required:
         - tag_uuid
-        - source_uuid
-        - source_data_uuid
+        - src_uuid
+        - src_data_uuid
         - data_type
         - uom
         - record_count
         - earliest_time_iso8601
         - latest_time_iso8601
       description: Timeseries tag info response
-    TSGetTagInfoResponses:
-      type: array
-      items:
-        $ref: '#/components/schemas/TSGetTagInfoResponse'
+
+    TSGetTagInfoTable:
+      type: object
+      properties:
+        tag_uuid:
+          type: array
+          items:
+            type: string
+        src_uuid:
+          type: array
+          items:
+            type: string
+        src_data_uuid:
+          type: array
+          items:
+            type: string
+        data_type:
+          type: array
+          items:
+            type: integer
+        uom:
+          type: array
+          items:
+            type: string
+        record_count:
+          type: array
+          items:
+            type: integer
+        earliest_time_iso8601:
+          type: array
+          items:
+            type: string
+        latest_time_iso8601:
+          type: array
+          items:
+            type: string
+      required:
+        - tag_uuid
+        - src_uuid
+        - src_data_uuid
+        - data_type
+        - uom
+        - record_count
+        - earliest_time_iso8601
+        - latest_time_iso8601
+
     GetSamplesResult:
       type: object
       properties:
@@ -1505,7 +1545,7 @@ components:
       type: object
       additionalProperties:
         type: string
-      description: Map of asset UUIDs to asset names (or similar)
+      description: Map of asset Uuids to asset names (or similar)
     ParseUOMResult:
       type: object
       properties:
