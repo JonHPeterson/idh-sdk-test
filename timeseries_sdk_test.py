@@ -6,6 +6,8 @@ from encodings.aliases import aliases
 import sys
 import os
 
+import httpx
+
 from sdk.idh_ota_client.models import asset_response
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'sdk')))
 from idh_ota_client.client import Client
@@ -58,6 +60,18 @@ def get_two_tags(client: Client) -> list[str]:
     except Exception as e:
         print("Exception during SDK call to get asset tags:", e)
         return []
+def test_failures(client: Client):
+    try:
+        get_bad_tag_info_response = get_tag_info.sync(client=client, tag_uuid="nonexistent-tag-uuid")
+        print("SDK parsed timeseries tag info response for nonexistent tag UUID:", get_bad_tag_info_response)
+    except Exception as e:
+        print("Expected exception during SDK call to get tag info with nonexistent tag UUID:", e)
+    # test the raw response as well for debugging    import httpx
+    import httpx
+    with httpx.Client() as http_client:        
+        raw_bad_tag_info = http_client.get(f"http://localhost:8080/api/v1/timeseries/taginfo/nonexistent-tag-uuid")
+        print(f"\nRaw timeseries tag info response text for nonexistent tag UUID:")
+        print(raw_bad_tag_info.text)
 
 def test_helper_funcs(client: Client):
     try:
@@ -85,6 +99,7 @@ def test_helper_funcs(client: Client):
 def main():
     # Set a breakpoint here to step through
     client = Client(base_url="http://localhost:8080")
+    test_failures(client)
     all_tag_info_response = get_all_tag_info.sync(client=client, start_position=0, max_results=10)
     print(all_tag_info_response)
     test_helper_funcs(client)

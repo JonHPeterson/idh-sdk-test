@@ -500,22 +500,43 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: true
-        '404':
-          description: Not found
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: true
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: true  
+                $ref: '#/components/schemas/ErrorResponse'
   /api/v1/timeseries/alltaginfo:
     get:
       operationId: GetAllTagInfo
@@ -545,13 +566,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TSGetTagInfoTable'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: true
+                $ref: '#/components/schemas/ErrorResponse'
   /api/v1/timeseries/tagsbysource/{srcUuid}:
     get:
       operationId: GetTagsBySource
@@ -1560,6 +1616,22 @@ components:
         - symbol
         - def
       additionalProperties: false
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code identifier
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          additionalProperties: true
+          description: Optional additional error details
+      required:
+        - code
+        - message
   securitySchemes:
     BearerAuth:
       type: http
