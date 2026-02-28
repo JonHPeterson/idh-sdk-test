@@ -103,10 +103,10 @@ def main():
     all_tag_info_response = get_all_tag_info.sync(client=client, start_position=0, max_results=10)
     print(all_tag_info_response)
     test_helper_funcs(client)
-    max_samples = 100000
+    max_samples = 5
     tag_uuids = get_two_tags(client)
     starttime, endtime = get_start_and_end_time(client, tag_uuid=tag_uuids[0])  # replace with an actual tag UUID for testing
-    print("Two tag UUIDs for testing:", tag_uuids)
+    print(f"Two tag UUIDs for testing: {tag_uuids} {starttime} {endtime}")
     from_uoms = ["m", "N"]
     two_uoms = ["feet", "lbf"] 
     try:
