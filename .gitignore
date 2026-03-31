@@ -2,6 +2,8 @@ __pycache__/
 build/
 dist/
 sdk/
+openapi.yaml
+idh_helpers.py
 *.egg-info/
 .pytest_cache/
 

@@ -35,6 +35,20 @@ info:
 
     ## Authentication & Security
     All API endpoints require authentication via AWS Cognito JWT tokens. Clients must include a valid bearer token in the Authorization header for every request. The token should be prefixed with "Bearer " (e.g., "Bearer eyJhbGc..."). Tokens are validated against the Cognito JWKS (JSON Web Key Set) to ensure authenticity and proper authorization.
+  
+    ## Helper Functions and SDKs
+    From openapi.yaml, linked at top, users can generate an SDK directly from the OpenAPI spec using the OpenAPI Generator. The SDK provides convenient functions for calling the API and handling authentication. Additionally,
+    Details vary based on your python environment and setup, the commands to generate the SKD are approximately as follows:
+      
+      - %pip install --upgrade openapi-python-client
+      - openapi-python-client generate --overwrite --url "http://your_idh_app_server:8080/openapi.yaml?nocache=$(date +%s)"
+    
+    Download idh_helpers.py with several functions to assist using the SDK.
+      
+      - !curl -O http://your_idh_app_server:8080/idh_helpers.py
+      - from idh_helpers import samples_to_dataframe
+      - df = samples_to_dataframe(response)
+
   license:
     name: The IDH License
     url: http://www.theidh.com/licenses/LICENSE-1.0.html
@@ -165,22 +179,46 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
-  /api/v1/classifications{name}:
+  /api/v1/classifications/rootclassifications:
     get:
-      operationId: GetClassificationByName
-      summary: Get classification by name
-      description: Get classification by name
+      operationId: GetRootClassifications
+      summary: Get all the root classifications
+      description: Get all the root classifications
+      tags:
+        - classifications
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Map of classification Uuids to classification names (or similar)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RootClassificationsResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/v1/classifications/{classificationUuid}:
+    get:
+      operationId: GetClassificationByUuid
+      summary: Get classification by Uuid
+      description: Get classification by Uuid
       tags:
         - classifications
       security:
         - BearerAuth: []
       parameters:
-        - name: name
+        - name: classificationUuid
           in: path
           required: true
           schema:
             type: string
-          description: Classification Name
+          description: Classification Uuid
       responses:
         '200':
           description: Classification details
@@ -1294,17 +1332,6 @@ components:
         - src_name
         - fields
       description: Source details response
-    ClassificationResponse:
-      type: object
-      properties:
-        name:
-          type: string
-        items:
-          type: integer
-      required:
-        - name
-        - items
-      description: Classification details response
     AssetResponse:
       type: object
       properties:
@@ -1602,6 +1629,11 @@ components:
       additionalProperties:
         type: string
       description: Map of asset Uuids to asset names (or similar)
+    RootClassificationsResponse:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map of classification Uuids to classification names (or similar)
     ParseUOMResult:
       type: object
       properties:
@@ -1616,6 +1648,43 @@ components:
         - symbol
         - def
       additionalProperties: false
+    ClassificationResponse:
+      type: object
+      properties:
+        classification_uuid:
+          type: string
+        classification_name:
+          type: string
+        classification_type:
+          type: string
+        starttime:
+          type: string        
+        endtime:
+          type: string        
+        asset_uuid:
+          type: string
+        fields:
+          type: object
+          description: Mapping of field names to values
+          additionalProperties:
+            type: string
+        parent_classifications:
+          type: array
+          items:
+            type: string
+        child_classifications:
+          type: array
+          items:
+            type: string
+      required:
+        - classification_uuid
+        - classification_name
+        - classification_type
+        - starttime
+        - endtime
+        - asset_uuid
+        - fields
+      description: Classification details response
     ErrorResponse:
       type: object
       properties:
